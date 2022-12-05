@@ -6,7 +6,7 @@ import TodoUpload from "../components/TodoUpload";
 import { TasksList } from "../types";
 
 export default function Main() {
-    const { isLoading, data } = useQuery<TasksList[]>(['tasks'], getTasks)
+    const { isLoading, data } = useQuery<TasksList[]>(['tasks'], getTasks, {retry:false})
     // const { isLoading: isGroupLoading, data: groupData } = useQuery<WorkGroup[]>(['workgroups'], getWorkgroups)
     // console.log(data)
     const { isOpen, onOpen, onClose } = useDisclosure()

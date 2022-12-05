@@ -18,3 +18,48 @@ export const logOut = () => instance.post("users/logout", null, {
         "X-CSRFToken": Cookie.get("csrftoken") || ""
     }
 }).then((response)=>response.data)
+
+export interface LoginVariables {
+    username: string;
+    password: string;
+}
+
+export interface LoginSuccess {
+    ok: string;
+}
+export interface LoginError {
+    msg: string;
+}
+
+export const logIn = ({username, password}:LoginVariables) => instance.post("users/login", { username, password }, {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }
+}).then((response) => response.data)
+
+// username 중복확인
+export interface CheckUsername {
+    username: string;
+}
+export const checkUsername = ({ username }:CheckUsername) => instance.post("users/check_username", { username }, {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }
+}).then((response) => response.data)
+
+export interface SignupVariables {
+    email: string | null;
+    nickname: string;
+    password: string;
+    username: string;
+    group_code: string;
+}
+
+export const signUp = ({ email, nickname, password, username, group_code }: SignupVariables) => instance.post(
+    "users/",
+    {username, password, email, nickname, group_code},
+    {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }
+}).then((response)=>response.data)

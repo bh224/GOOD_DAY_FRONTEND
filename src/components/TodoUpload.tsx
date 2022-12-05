@@ -10,7 +10,7 @@ interface TodoModalProps {
 }
 
 export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
-    const { isLoading: isGroupLoading, data: groupData } = useQuery<WorkGroup[]>(['workgroups'], getWorkgroups)
+    const { isLoading: isGroupLoading, data: groupData } = useQuery<WorkGroup[]>(['workgroups'], getWorkgroups, {retry:false})
     const [ type, setType ] = useState("");
     return (
             <Modal isOpen={isOpen} onClose={onClose}>

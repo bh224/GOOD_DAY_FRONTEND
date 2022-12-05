@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, CircularProgress, CircularProgressLabel, HStack, Text, useDisclosure, useToast } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient, QueryCache  } from "@tanstack/react-query";
 import { FcCloseUpMode,} from "react-icons/fc";
 import { logOut } from "../api";
 import useUser from "../lib/useUser";
@@ -13,16 +13,15 @@ export default function Header() {
   const toast = useToast()
   const mutation = useMutation(logOut, {
     onSuccess: (data) => {
+      queryClient.refetchQueries(['tasks'])
       toast({
         status: "success",
         description: data.ok,
         isClosable: true,
         duration: 2000,
-        containerStyle: {
-          bg: "yellow.100",
-        }
       })
       queryClient.refetchQueries(['user'])
+   
     }
   })
   const onLogout = async () => {
