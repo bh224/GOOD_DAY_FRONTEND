@@ -63,14 +63,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     // 유저등록
     const mutation = useMutation(signUp, {
         onMutate: () => {
-            console.log("start")
+            // console.log("start")
         },
         onSuccess: (data) => {
             signupToast({
                 status: "success",
-                description: data.ok,
+                description: "유저등록이 완료되었습니다!",
                 duration: 2000
             })
+            onClose()
             queryClient.refetchQueries(['user'])
             reset()
             navigate('/')
@@ -97,7 +98,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             mutation.mutate({username, password, email, nickname, group_code})
         }
     }
-    console.log(watch())
+    
+    // console.log(watch())
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay/>
