@@ -1,5 +1,7 @@
 import axios from "axios";
 import Cookie from "js-cookie"
+import { QueryFunctionContext } from "@tanstack/react-query";
+import { formatDate, TimeNow } from "./lib/utils";
 
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/v1/",
@@ -7,6 +9,9 @@ const instance = axios.create({
 })
 
 export const getTasks = () => instance.get("tasks/").then((response) => response.data)
+export const getTaskTome = () => instance.get("tasks/tome").then((response) => response.data)
+export const allTasks = () => instance.get("tasks/all").then((response) => response.data)
+export const dailyTask = (date:string) => instance.get(`tasks/all?created_at=${date}`).then((response) => response.data)
 
 export const getUser = () => instance.get("users/me").then((response) => response.data)
 //그룹불러오기
@@ -63,3 +68,192 @@ export const signUp = ({ email, nickname, password, username, group_code }: Sign
         "X-CSRFToken": Cookie.get("csrftoken") || ""
     }
 }).then((response)=>response.data)
+
+export interface EditUserVariables {
+    nickname: string;
+    email: string;
+}
+// 유저정보 수정
+export const updateUser = ({ nickname, email }: EditUserVariables) => instance.put(
+    'users/me',
+    { nickname, email },
+    {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""
+        }
+    }
+).then((response)=>response.data)
+
+
+//  간편로그인
+
+export const kakaoLogin = (code: string) => instance.post(
+    "users/kakao",
+    { code },
+    {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""    
+    }}
+).then((response) => response.data)
+
+export const googleLogin = (code: string) => instance.post(
+    "users/google",
+    { code },
+    {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""    
+    }}
+).then((response)=>response.data)
+
+export interface NaverVarialbles {
+    code: string;
+    state: string;
+}
+
+export const naverLogin = (code:string) => instance.post(
+    "users/naver",
+    { code},
+    {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""    
+    }}
+).then((response) => response.data)
+
+export interface TaskVariables {
+    type: string;
+    tasker: string;
+    content: string;
+    limit_date: string;
+    status: string;
+    pk: string;
+    group_pk: number;
+}
+
+export const uploadTask = (data:TaskVariables) => instance.post(
+    "tasks/",
+    data,
+    {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""   
+    }}
+).then((response) => response.data)
+
+export const editTask = (data: TaskVariables) => instance.put(
+        `tasks/${data.pk}/`,
+        data,
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || ""
+            }
+        }
+    ).then((response) => response.data)
+
+export const deleteTask = (pk:string | undefined) => {
+    console.log("api>>>", pk)
+    return instance.delete(
+        `tasks/${pk}`,
+        {
+            headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""
+        }}
+    ).then((response)=>response.data)
+}
+
+export const getTask = ({ queryKey }: QueryFunctionContext) => {
+    const pk = queryKey[1]
+    return instance.get(`tasks/${pk}`).then((response)=>response.data)
+}
+
+export const getComment = ({ queryKey }: QueryFunctionContext) => {
+    const pk = queryKey[1]
+    return instance.get(`tasks/${pk}/comments`).then((response)=>response.data)
+}
+
+export interface CommentVariables {
+    pk: string | undefined;
+    content: string;
+}
+
+export const postComment = ({ pk, content }: CommentVariables) => {
+    return instance.post(
+    `tasks/${pk}/comments/`,
+    { pk, content },
+    {
+        headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }}
+).then((response)=>response.data)
+}
+
+
+
+export interface deleteComVariables {
+    task: string | undefined;
+    pk: number;
+}
+
+export const deleteComment = ({ task, pk }:deleteComVariables) => instance.delete(
+    `tasks/${task}/comments/${pk}`,
+    {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""
+        }
+    }
+).then((response) => response.data)
+
+export const getToday = () => {
+    const today = formatDate(new Date())
+    return  instance.get(`users/today?today=${today}`).then((response)=>response.data)
+}
+
+export interface StartTodayVariables {
+    state_code: string;
+    start_time: string;
+}
+
+export const startToday = ({ state_code, start_time }:StartTodayVariables) => {
+    return instance.post(
+        'users/todays',
+        { state_code, start_time },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || ""
+            }
+        }
+    ).then((response) => response.data)
+}
+
+export interface EndTodayVariables {
+    state_code: string;
+    end_time: string;
+}
+
+export const endToday = ({ state_code, end_time }:EndTodayVariables) => {
+    return instance.put(
+        'users/today',
+        { state_code, end_time },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || ""
+            }
+        }
+    ).then((response) => response.data)
+}
+
+// 모든그룹불러오기
+export const getAllGroups = () => instance.get("users/workgroups?filter=all").then((response)=>response.data)
+
+export interface CreateGroupVariables {
+    group_name: string;
+    description: string;
+}
+
+export const createGroup = ({ group_name, description }:CreateGroupVariables) => instance.post(
+    'users/workgroups',
+    { group_name, description },
+    {
+        headers: {
+             "X-CSRFToken": Cookie.get("csrftoken") || ""
+        }
+    }
+).then((response)=>response.data)
