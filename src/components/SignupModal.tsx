@@ -129,21 +129,22 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <InputGroup>
                     <InputLeftElement children={<FcLock />} />
                     <Input type="password" {...register("repassword")}  placeholder="PASSWORD CONFIRM" />
-                        </InputGroup>
-                        {watch().password != watch().repassword ? <Text fontSize={"2xs"} color="red.300">패스워드가 일치하지 않습니다</Text> : null}
-                <InputGroup>
+                </InputGroup>
+                    {watch().password != watch().repassword ? <Text fontSize={"2xs"} color="red.300">패스워드가 일치하지 않습니다</Text> : null}
+                <VStack pt={3}>
+                    <Text fontSize={"xs"} color={"gray.500"}>* 그룹코드를 아는 경우 입력 (option)</Text>
+                    <HStack justifyContent={"flex-end"} id="pincode">
                         <Box textAlign={"center"}>Group Code</Box>
-                        <HStack>
                         <PinInput  type='alphanumeric' onChange={mergeCode}>
                             <PinInputField {...register("code1")} />
                             <PinInputField {...register("code2")} />
                             <PinInputField {...register("code3")}/>
                             <PinInputField {...register("code4")}/>
                         </PinInput>
-                        </HStack>
-                </InputGroup>
+                    </HStack>            
                 </VStack>
-                <Button type="submit" mt={5} w="100%" bg={"purple.100"}>Sign up</Button>
+                </VStack>
+                <Button type="submit" mt={5} w="100%" colorScheme={"purple"} variant='outline' >Sign up</Button>
                 <SocialLogin/>
                 </ModalBody>
             </ModalContent>

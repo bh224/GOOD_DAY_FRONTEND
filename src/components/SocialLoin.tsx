@@ -1,6 +1,5 @@
-import { Box, Button, Circle, Divider, HStack, Image, VStack } from "@chakra-ui/react";
-import { BsEnvelope } from "react-icons/bs";
-import { FaComment } from "react-icons/fa";
+import { Box, Button, Circle, Divider, HStack, Image, Img, VStack } from "@chakra-ui/react";
+import { BsChatFill, BsEnvelope } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
 
 export default function SocialLogin() {
@@ -31,11 +30,9 @@ export default function SocialLogin() {
                 <Divider />
             </HStack>
             <VStack justifyContent={"space-evenly"} mb={5}>
-                <Button as="a" href={`https://kauth.kakao.com/oauth/authorize?${kakao}`} mt={5} w="100%" bg={"blue.100"} leftIcon={<FcGoogle/>}>Login with Kakao</Button>
-                <Button as="a" href={`https://nid.naver.com/oauth2.0/authorize?${naver}`} mt={5} w="100%" bg={"blue.100"} leftIcon={<FcGoogle/>}>Login with Naver</Button>
-                <Button as="a" href={`https://accounts.google.com/o/oauth2/v2/auth?${google}`} mt={5} w="100%" bg={"blue.100"} leftIcon={<FcGoogle/>}>Login with Google</Button>
-                
-        
+                <Button as="a" href={`https://kauth.kakao.com/oauth/authorize?${kakao}`} mt={5} w="100%" bg={"#FEE500"} leftIcon={<BsChatFill/>}>Login with Kakao</Button>
+                <Button as="a" href={`https://nid.naver.com/oauth2.0/authorize?${naver}`} mt={5} w="100%" bg={"#03C75A"} color={"white"} >Login with Naver</Button>
+                <Button as="a" href={`https://accounts.google.com/o/oauth2/v2/auth?${google}`} mt={5} w="100%" bg={"blue.100"} leftIcon={<FcGoogle />}>Login with Google</Button>
             </VStack>
         </Box>
     )

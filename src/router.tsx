@@ -7,6 +7,7 @@ import GoogleLogin from "./routes/GoogleLogin";
 import NaverLogin from "./routes/NaverLogin";
 import TaskDetail from "./routes/TaskDetail";
 import MyPage from "./routes/MyPage";
+import GroupDetail from "./routes/GroupDetail";
 
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             {
                 path: "task/:pk",
                 element: <TaskDetail />
+            },
+            {
+                path: "group/:pk",
+                element: <GroupDetail />
             },
             {
                 path: "simplelogin",

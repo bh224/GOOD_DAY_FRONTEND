@@ -4,13 +4,15 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { createGroup, CreateGroupVariables, getAllGroups } from '../api';
 import { WorkGroup } from '../types';
 import { useForm } from 'react-hook-form';
+import Group from './Group';
+
 
 export default function AllGroup() {
     const { isLoading, data } = useQuery<WorkGroup[]>(['allgroups'], getAllGroups);
     // console.log(data)
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { register, watch, reset, handleSubmit } = useForm<CreateGroupVariables>();
-    console.log(watch())
+    // console.log(watch())
     const mutation = useMutation(createGroup, {
         onSuccess: (data) => {
             console.log(data)
@@ -27,41 +29,18 @@ export default function AllGroup() {
     }
     return (
         <VStack>
-            <Button w="100%" size="sm" leftIcon={<ChatIcon/>} onClick={onOpen}>그룹 만들기</Button>
-            {data?.map((group) => (
-                <Card
-            direction={{ base: 'column', sm: 'row' }}
-            overflow='hidden'
-                    variant='outline'
-                    key={group.pk}
-                    height={200}
-            >
-        <Image
-            objectFit='cover'
-            maxW={{ base: '100%', sm: '200px' }}
-            src='https://images.unsplash.com/photo-1667489022797-ab608913feeb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw5fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60'
-            alt='Caffe Latte'
-        />
-
-    <Stack>
-                        <CardBody height="100%" py={2} px={5}>
-                            <HStack>
-        <Heading size='md' fontSize={"md"}>{ group.group_name}</Heading>
-        <Text py='2' fontSize={"sm"}>
-            함께하는 멤버 {group.members.length}
-        </Text>
-                            </HStack>
-
-        <Text py='2'>
-            Caffè latte is a coffee beverage of Italian origin made with espresso
-            and steamed milk.
-        </Text>
-        {group.is_member ?
-            <Button size={"sm"} variant='solid' colorScheme='blue' disabled >Already Joined</Button> 
-            : <Button size={"sm"} variant='solid' colorScheme='blue'>JOIN</Button>}
-                        </CardBody>
-    </Stack>
-    </Card>
+            <Button w="60%" mb={5} size="sm" leftIcon={<ChatIcon/>} onClick={onOpen}>그룹 만들기</Button>
+                {data?.map((group) => (
+                    <Group
+                        key={group.pk}
+                        pk={group.pk}
+                        member={group.member}
+                        group_code={group.group_code}
+                        group_name={group.group_name}
+                        members={group.members}
+                        is_member={group.is_member}
+                        description={group.description}
+                    />
             ))}
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay/>
@@ -71,17 +50,17 @@ export default function AllGroup() {
                 <ModalBody as="form" fontSize={"sm"} onSubmit={handleSubmit(onSubmit)}>
                 <VStack>
                             <InputGroup>
-                                <InputLeftAddon fontSize={"sm"} children='그룹 이름' />
+                                <InputLeftAddon textAlign={"center"} w="30%" fontSize={"sm"} children='Group Name' />
                     <Input {...register("group_name")} required/>
                 </InputGroup>
                 <InputGroup>
-                                <InputLeftAddon fontSize={"sm"} children='그룹 설명' />
+                                <InputLeftAddon w="30%" fontSize={"sm"} children='Description' />
                     <Input {...register("description")} required/>
                 </InputGroup>
-                        <Text fontSize={"sm"} textAlign={"center"}>유저 추가는 그룹 상세페이지에서 해주세요</Text>
+                        <Text fontSize={"xs"} textAlign={"center"} py={2}>유저 추가는 그룹 상세페이지에서 해주세요</Text>
                         </VStack>
                     
-                <Button type="submit" mt={5} w="100%" bg={"purple.100"}>Submit</Button>
+                <Button type="submit" my={5} w="100%" colorScheme='teal' variant='outline'>Submit</Button>
    
                 </ModalBody>
             </ModalContent>

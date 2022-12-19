@@ -14,8 +14,10 @@ export interface WorkGroup {
     pk: number;
     group_code: string;
     group_name: string;
+    description: string;
     members: GroupMembers[];
     is_member: boolean;
+    member: GroupMembers;
 }
 
 export interface GroupMembers {

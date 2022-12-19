@@ -138,9 +138,19 @@ export const uploadTask = (data:TaskVariables) => instance.post(
     }}
 ).then((response) => response.data)
 
-export const editTask = (data: TaskVariables) => instance.put(
-        `tasks/${data.pk}/`,
-        data,
+export interface EditTaskVariables {
+    pk: string | undefined;
+    type: string | undefined;
+    status: string | undefined;
+    tasker: string | undefined;
+    content: string | undefined;
+    limit_date: string | undefined;
+    groupPk: number | undefined;
+}
+
+export const editTask = ({type, tasker, content, status, limit_date, pk, groupPk}:EditTaskVariables) => instance.put(
+        `tasks/${pk}/`,
+        {type, tasker, content, status, limit_date, pk, groupPk},
         {
             headers: {
                 "X-CSRFToken": Cookie.get("csrftoken") || ""
@@ -163,6 +173,8 @@ export const getTask = ({ queryKey }: QueryFunctionContext) => {
     const pk = queryKey[1]
     return instance.get(`tasks/${pk}`).then((response)=>response.data)
 }
+
+export const tasksCounts = () => instance.get("tasks/tasks-counts").then((response)=>response)
 
 export const getComment = ({ queryKey }: QueryFunctionContext) => {
     const pk = queryKey[1]
@@ -254,6 +266,58 @@ export const createGroup = ({ group_name, description }:CreateGroupVariables) =>
     {
         headers: {
              "X-CSRFToken": Cookie.get("csrftoken") || ""
+        }
+    }
+).then((response) => response.data)
+
+export const getGroup = ({ queryKey }: QueryFunctionContext) => {
+    const pk = queryKey[1]
+    return instance.get(`users/workgroups/${pk}`).then((response)=>response.data)
+}
+
+export interface JoinGroupVariables {
+    pk: string | undefined;
+    member_pk: string;
+}
+
+export const joinWorkgroup = ({ pk, member_pk }:JoinGroupVariables) => instance.post(
+    `users/workgroups/${pk}`,
+    { pk, member_pk },
+    {
+        headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }}
+).then((response) => response.data)
+
+export interface EditGroupVariables {
+    pk: string | undefined;
+    group_name: string;
+    description: string;
+}
+
+export const editWorkgroup = ({pk, group_name, description}:EditGroupVariables) => instance.put(
+    `users/workgroups/${pk}`,
+    {group_name, description},
+    {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }}
+).then((response) => response.data)
+
+export const deleteWorkgroup = (pk: string | undefined) => instance.delete(
+    `users/workgroups/${pk}`,
+    {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }}
+).then((response) => response.data)
+
+export const leaveWorkgroup = (pk: string | undefined) => instance.post(
+    'users/me',
+    { pk },
+    {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || ""
         }
     }
 ).then((response)=>response.data)

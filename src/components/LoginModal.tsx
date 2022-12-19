@@ -67,7 +67,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
               </InputGroup>
                 <Text fontSize="xs" color="red">{errors.password?.message}</Text>
               </VStack>
-            <Button type="submit" mt={5} w="100%" bg={"purple.100"} textAlign={"center"}>Log In</Button>
+            <Button type="submit" mt={5} w="100%" colorScheme={"purple"} variant='outline' >Log In</Button>
               <SocialLogin/>
             </ModalBody>
           </ModalContent>
