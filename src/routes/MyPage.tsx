@@ -36,7 +36,7 @@ export default function MyPage() {
         mutation.mutate({nickname, email})
     }
     return (
-        <HStack w="80%" justifyContent={"center"} alignItems={"flex-start"} m={"auto"}>
+        <HStack w="80%" justifyContent={"center"} alignItems={"flex-start"} m={"auto"} py={150}>
             <VStack>
                 <Avatar name={user?.username} size="lg"/>
                 <Button variant={"link"}>Edit Image</Button>

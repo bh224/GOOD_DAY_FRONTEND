@@ -9,3 +9,30 @@ export const StatusTime = (time: string) =>
 
 export const TimeNow = (time: Date) =>
     `${time.getHours()}:${time.getMinutes()}`
+
+// 타입별 배지컬러
+const badgeColor = {
+    task: "red",
+    todo: "blue",
+    private: "yellow"
+}
+export const typeColor = (type:string | undefined) => {
+    if (type == "task") {
+        return badgeColor.task
+    } else if (type == "todo") {
+        return badgeColor.todo
+    } else {
+        return badgeColor.private
+    }
+}
+
+// tast status
+export const taskType = (status: string | undefined) => {
+    if (status == "yet") {
+        return "확인 전"
+    } else if (status == "doing") {
+        return "진행중"
+    } else {
+        return "완료"
+    }
+}

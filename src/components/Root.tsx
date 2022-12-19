@@ -7,7 +7,7 @@ import Header from "./Header";
 function Root() {
   return (
     <Box>
-      <Header/>
+      <Header />
       <Outlet />
       <ReactQueryDevtools />
     </Box>

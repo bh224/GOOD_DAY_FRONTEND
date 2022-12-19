@@ -32,6 +32,7 @@ export default function GroupTasks({ data }: any) {
         <Box>
         Group Members Tasks 
             </Box>
+            <Text fontSize={"xs"}>내가 속한 그룹 유저들의 오늘 할 일을 볼 수 있습니다</Text>
             <Accordion allowToggle w="80%">
                 {data.map((group:any) => (
                     <AccordionItem key={group.pk}>
@@ -49,8 +50,8 @@ export default function GroupTasks({ data }: any) {
         </h2>
                         <AccordionPanel pb={4}>
                             {groupList.map((task) => (
-                                <Link to={`task/${task.pk}`}>
-            <Flex justifyContent={"flex-start"} alignItems={"center"}  _hover={{bg:"yellow.100"}}>
+                                <Link to={`task/${task.pk}`} key={task.pk}>
+            <Flex justifyContent={"flex-start"} alignItems={"center"} _hover={{bg:"yellow.100"}}>
                 
                                         <Badge textAlign={"center"} rounded={"md"} ml={2} pl={1} pr={1} w={"50px"} h={"23px"} colorScheme={"purple"}>{task.status}</Badge>
 

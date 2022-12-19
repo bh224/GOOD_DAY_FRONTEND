@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Checkbox, Circle, Flex, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, useDisclosure, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Checkbox, Circle, Flex, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { TaskVariables, uploadTask } from "../api";
@@ -14,21 +14,27 @@ export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
     const { isGroupLoading, groupData } = useWorkgroups()
     // console.log(groupData)
     const { register, watch, reset, handleSubmit } = useForm<TaskVariables>()
-    // console.log(watch())
     const queryClient = useQueryClient()
     const [type, setType] = useState("");
-    // console.log("type", type)
+    const [groupIndex, setGroupIndex] = useState(0);
+    const toast = useToast();
     const mutation = useMutation(uploadTask, {
-        onMutate: () => {
-            console.log("start")
-        },
         onSuccess: (data) => {
+            // console.log(data)
+            toast({
+                status: "success",
+                title: "일정이 등록되었습니다",
+            })
             reset()
             onClose()
             queryClient.refetchQueries(['tasks'])
         },
         onError: (error) => {
-            console.log(error)
+            toast({
+                status: "error",
+                title: "다시 시도해 주세요"
+            })
+            // console.log(error)
         }
     })
     const onSubmit = (data: TaskVariables) => {
@@ -47,31 +53,35 @@ export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
                                 <option value="private">PRIVATE</option>
                             </Select>
                             {type === "task" ?
-                                <VStack w="100%">
+                                <VStack w="100%"  py={2}>
                                     <Text fontSize={"xs"}>담당자지정</Text>
                                     <HStack>
-                                <Select placeholder="그룹선택" fontSize={"xs"} size="xs" {...register("group_pk")}>
+                                <Select placeholder="그룹선택" fontSize={"xs"} size="xs" {...register("group_pk")} onChange={(e) => {
+                                    const optionIndex = e.target.selectedIndex -1
+                                    setGroupIndex(optionIndex)
+                                }}>
                                             {groupData?.map((group) => (
                                                 <option key={group.pk} value={group.pk}>{group.group_name}</option>
                                         ))}
                                     </Select>
                                     <Select placeholder="담당자선택"  fontSize={"xs"}  size="xs" {...register("tasker")}>
-                                       {groupData?.map((group) => (
-                                           <>{group.members.map((mem) => <option value={mem.pk}> {mem.username}</option>)}</>
-                                        ))}
+                                        {
+                                        groupData![groupIndex].members.map((member) =>
+                                            <option key={member.pk} value={member.pk}>{member.nickname}</option>
+                                        )}
                                     </Select>
                                     </HStack>
                                 </VStack>
                                 : null}
                             <InputGroup>
-                                <VStack w="100%">
+                                <VStack w="100%" >
                                 <Text>내용</Text>
                                     <Textarea {...register("content")} />
                                 <Text>마감일</Text>
                                 <Input {...register("limit_date")}  fontSize={"xs"} type="date" />
                                 </VStack>
                             </InputGroup>
-                            <Button type="submit" w="100%">SAVE</Button>
+                            <Button my={5} type="submit" w="100%" colorScheme='teal' variant='outline'>SAVE</Button>
                         </ModalBody>
                     </ModalContent>
                 </Modal>

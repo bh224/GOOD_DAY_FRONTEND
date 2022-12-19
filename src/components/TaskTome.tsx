@@ -35,7 +35,7 @@ export default function TaskTome({ pk, tasker, status, type, content, limit_date
         <Link to={`task/${pk}`}>
             <Flex justifyContent={"flex-start"} alignItems={"center"}  _hover={{bg:"yellow.100"}}>
                 <Circle size="15px" bg={statusColor(status)} />
-                <Badge rounded={"md"} colorScheme={typeColor(type)} textAlign={"center"} ml={2} pl={1} pr={1} w={"50px"} h={"23px"}>{type}</Badge>
+                <Badge rounded={"md"} colorScheme={typeColor(type)} textAlign={"center"} ml={2} pl={1} pr={1} w={"70px"} h={"23px"} >{type}</Badge>
                 <Text ml={2} noOfLines={1} >{content}</Text>
                 <HStack ml={"auto"}>
                     <FcCollaboration children={<Text>group</Text>} size={25} />

@@ -11,7 +11,9 @@ import { DateToString } from "../lib/utils";
 import { TaskDetails } from "../types";
 
 
-export default function Alltasks({ data }: any) {
+
+export default function Alltasks({data}:any) {
+    // console.log(data)
     const [taskList, setTaskList] = useState<TaskDetails[]>([]);
     const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/v1/",
@@ -24,15 +26,15 @@ export default function Alltasks({ data }: any) {
         setTaskList({data}.data)
         console.log(taskList)
     }
-    // console.log(getDailytask)
     return (
         <VStack>
 
         <Box>
             My All Tasks
             </Box>
+        <Text fontSize={"xs"}>지난 내 일정들을 볼 수 있습니다</Text>
             <Accordion allowToggle w="70%">
-                {data.data.map((date:string) => (
+                {data?.map((date:string) => (
                     <AccordionItem key={date}>
         <h2>
         <AccordionButton>
