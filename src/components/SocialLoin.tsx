@@ -5,12 +5,14 @@ import { FcGoogle } from "react-icons/fc";
 export default function SocialLogin() {
     const kakaoParams = {
         client_id: "90eb4807776054920da36cf74a9b006e",
+        // redirect_uri: "https://good-day.today/simplelogin/kakao",
         redirect_uri: "http://127.0.0.1:3000/simplelogin/kakao",
         response_type: "code",
     }
     const kakao = new URLSearchParams(kakaoParams).toString();
     const googleParams = {
         client_id: "1051453023789-boperin529q0af3mf1idkqlplqmt60hs.apps.googleusercontent.com",
+        // redirect_uri: "https://good-day.today/simplelogin/google",
         redirect_uri: "http://127.0.0.1:3000/simplelogin/google",
         response_type: "code",
         scope: "https://www.googleapis.com/auth/userinfo.email"
@@ -19,6 +21,7 @@ export default function SocialLogin() {
     const naverParams = {
         response_type: "code",
         client_id: "qW_D7ntXsDAXdVlaJf2B",
+        // redirect_uri: "https://good-day.today/simplelogin/naver",
         redirect_uri: "http://127.0.0.1:3000/simplelogin/naver",
         state: "H1GRM1ofvYKBwEtxe2bjHyulgdOlTd3u" // todo 나중에 랜덤값으로 변경
     }

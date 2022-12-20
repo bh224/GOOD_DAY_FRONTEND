@@ -7,6 +7,7 @@ import {
   Heading,
   HStack,
   Progress,
+  Stack,
   Tab,
   TabList,
   TabPanel,
@@ -48,11 +49,20 @@ export default function Main() {
   // 일정등록모달
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <HStack px={10} py={150} justifyContent={"center"} alignItems={"flex-start"}>
+    <Stack
+      direction={{
+        base: "column",
+        sm: "column",
+        md: "row"
+      }}
+      px={{ base: "5", md: "10"}} py={{base: "0", md: "150"}} justifyContent={"center"} alignItems={"flex-start"}>
       <Helmet>
         <title>goodday</title>
       </Helmet>
-      <Box w="35%">
+      <Box
+        w={{ base: "100%", sm: "100%", md: "35%" }}
+        h={{base: "450", md: "700px"}}
+      >
         <Button
           w="100%"
           mb={3}
@@ -133,15 +143,14 @@ export default function Main() {
            : null }
         </Box>
       </Box>
-      <Box w="65%" px={10}>
-        <Tabs mt={4} isFitted>
+      <Box w={{base: "100%", md: "65%"}} pl={{base: "0",md: "10"}}>
+        <Tabs mt={4} h={{base: "450", md: "500px"}} isFitted>
           <TabList>
             <Tab>MyTasks</Tab>
-            <Tab>MyWorkgroup</Tab>
-            <Tab>Other Groups</Tab>
-            <Tab>Recommend</Tab>
+            <Tab>MyGroup</Tab>
+            <Tab>JoinUs</Tab>
           </TabList>
-          <TabPanels>
+          <TabPanels  overflowY={"scroll"}>
             <TabPanel>
               {allTaskData ? <Alltasks data={allTaskData?.data} /> : null}
             </TabPanel>
@@ -151,15 +160,9 @@ export default function Main() {
             <TabPanel>
               <AllGroup />
             </TabPanel>
-            <TabPanel>
-              <p>독서노트</p>
-            </TabPanel>
-            <TabPanel>
-              <p>keep memo</p>
-            </TabPanel>
           </TabPanels>
         </Tabs>
       </Box>
-    </HStack>
+    </Stack>
   );
 }

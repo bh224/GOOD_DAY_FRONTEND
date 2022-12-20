@@ -14,13 +14,20 @@ export default function Comment({ pk, task, author, content, created_at }: Comme
     // console.log('pk',pk, 'task', task)
   const toast = useToast();
   const queryClient = useQueryClient();
+  // 코멘트삭제
   const mutation = useMutation(deleteComment, {
       onSuccess: () => {
-          console.log("deleted")
-          queryClient.refetchQueries(['comment'])
+      toast({
+        status: "success",
+        title: "삭제 되었습니다"
+        })
+      queryClient.refetchQueries(['comment'])
       },
       onError: ({response}) => {
-          console.log(response.data)
+      toast({
+        status: "error",
+        title: "다시 시도해 주세요"
+      })
       }
   })
     const deleteSubmit = () => {
@@ -34,10 +41,9 @@ export default function Comment({ pk, task, author, content, created_at }: Comme
     <Flex >
       <Flex flex='1' gap='4' alignItems='center' flexWrap='wrap'>
         <Avatar name={author.username} size={"sm"}/>
-
         <Box>
           <Heading size='sm'>{author.nickname}</Heading>
-                  <Text>{DateToString(created_at)}</Text>
+          <Text>{DateToString(created_at)}</Text>
         </Box>
         </Flex>
         <Menu>
@@ -50,7 +56,7 @@ export default function Comment({ pk, task, author, content, created_at }: Comme
       
     </Flex>
   </CardHeader>
-  <CardBody>
+  <CardBody pt={0}>
     <Text>
       {content}
     </Text>

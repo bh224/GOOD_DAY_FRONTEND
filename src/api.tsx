@@ -5,6 +5,7 @@ import { formatDate, TimeNow } from "./lib/utils";
 
 const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/v1/",
+    // baseURL: "https://good-day.today/api/v1/",
     withCredentials: true, //세션id 
 })
 
@@ -12,7 +13,7 @@ export const getTasks = () => instance.get("tasks/").then((response) => response
 export const getTaskTome = () => instance.get("tasks/tome").then((response) => response.data)
 export const allTasks = () => instance.get("tasks/all").then((response) => response.data)
 export const dailyTask = (date:string) => instance.get(`tasks/all?created_at=${date}`).then((response) => response.data)
-
+export const groupTasks = (pk:string) => instance.get(`tasks/group/${pk}`).then((response)=>response.data)
 export const getUser = () => instance.get("users/me").then((response) => response.data)
 //그룹불러오기
 export const getWorkgroups = () => instance.get("users/workgroups").then((response) => response.data)

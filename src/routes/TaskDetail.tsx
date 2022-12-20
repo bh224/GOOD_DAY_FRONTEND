@@ -17,12 +17,14 @@ export default function TaskDetail() {
   const { userLoading, user, isLoggedIn } = useUser();
   const navigate = useNavigate();
   const toast = useToast();
-  const { isLoading:isTaskLoading, data: taskData } = useQuery<TaskDetails>(['task', pk], getTask);
+  const { isLoading: isTaskLoading, data: taskData } = useQuery<TaskDetails>(['task', pk], getTask);
   const { data: commentData } = useQuery<CommentDetails[]>(['comment', pk], getComment)
   const {register, watch, handleSubmit, reset} = useForm()
     // console.log(watch())
   const { isOpen, onOpen, onClose } = useDisclosure()
   const queryClient = useQueryClient();
+
+  // 일정삭제
   const deleteMutation = useMutation(deleteTask, {
     onSuccess: () => {
     toast({
@@ -38,23 +40,29 @@ export default function TaskDetail() {
         title: error.response.data.detail,
         isClosable: true
       })
-      console.log(error.response.data)
+      // console.log(error.response.data)
     }
   })
   const deleteSubmit = async () => {
     alert("이 일정을 삭제합니다")
-    console.log("clicke delete")
     deleteMutation.mutate(pk)
   }
-
+    //  코멘트등록
     const mutation = useMutation(postComment, {
-    onSuccess: (data) => {
-        console.log(">>success", data)
-        reset()
+      onSuccess: () => {
+        toast({
+          status: "success",
+          title: "코멘트가 등록되었습니다",
+        })
+      reset()
       queryClient.refetchQueries(['comment'])
     },
-    onError: () => {
-      console.log("error")
+      onError: () => {
+        toast({
+          status: "error",
+          title: "다시 시도해 주세요",
+        })
+      // console.log("error")
     }
   })
   const onSubmit = (data:any) => {
@@ -62,97 +70,92 @@ export default function TaskDetail() {
     mutation.mutate({ pk, content })
   }
 
-    return (<HStack justifyContent={"center"} alignItems={"flex-start"} spacing={10} py={150}>
-        <Card width={"40%"}>
-  <CardHeader>
-    <Heading size='md'>MY TASK</Heading>
-  </CardHeader>
-
-  <CardBody>
-    <Stack divider={<StackDivider />} spacing='4'>
-      <Box>
-        <Heading size='xs' textTransform='uppercase'>
-        {taskData?.group != null ? taskData.group.group_name : <Text>개인 일정</Text>} 
-        </Heading>
-        <Text pt='2' fontSize='sm'>
-                <HStack>
-                  <Badge textAlign={"center"} rounded={"md"} colorScheme={typeColor(taskData?.type)} pl={1} pr={1} w={"70px"} h={"23px"}>{taskData?.type}</Badge>
-                <Text>
-                  To. {taskData?.tasker ? taskData?.tasker.nickname : taskData?.author.username} , From. {taskData?.author.username} 
-                  </Text>
+  return (
+    <Stack direction={{ base: "column", sm: "column", md: "row" }}
+      justifyContent={{ base: "center" }}
+      alignItems={{ base: "center", md: "flex-start" }}
+      spacing={10} py={{base: "50", md: "150"}}>
+    <Card width={{base: "80%", md: "40%"}}>
+      <CardHeader>
+      <Heading size='md'>MY TASK</Heading>
+      </CardHeader>
+    <CardBody>
+      <Stack divider={<StackDivider />} spacing='4'>
+        <Box>
+          <Heading size='xs' textTransform='uppercase'>
+            {taskData?.group != null ? taskData.group.group_name : "개인일정"} 
+          </Heading>
+          <HStack pt='3' fontSize='sm'>
+            <Badge textAlign={"center"} rounded={"md"} colorScheme={typeColor(taskData?.type)} pl={1} pr={1} w={"70px"} h={"23px"}>{taskData?.type}</Badge>
+                {taskData?.tasker != null ? <Text>To. {taskData?.tasker.nickname} ,</Text> : null}  <Text>From. {taskData?.author.username} </Text>
           </HStack>
-        </Text>
-      </Box>
-      <Box>
-        <Heading size='xs' textTransform='uppercase'>
-          Content
-        </Heading>
-        <Text pt='2' fontSize='sm'>
-          {taskData?.content}
-        </Text>
-      </Box>
-      <Box>
-        <Heading size='xs' textTransform='uppercase'>
-          Process
-        </Heading>
-        <Text pt='2' fontSize='sm'>
-          {taskType(taskData?.status)}
+        </Box>
+        <Box>
+          <Heading size='xs' textTransform='uppercase'>
+            Content
+          </Heading>
+              {taskData?.content != null ? <Text pt='2' fontSize='sm'>{taskData.content}</Text> : null}
+        </Box>
+        <Box>
+          <Heading size='xs' textTransform='uppercase'>
+            Process
+          </Heading>
+          <Text pt='2' fontSize='sm'>
+            {taskType(taskData?.status)}
             </Text>
-         {taskData?.status === "yet" ? <Text pt={2} fontSize='xs' color={"red.200"}>진행중으로 변경 해 주세요</Text>: null}
-        {taskData?.status === "doing" ? <Text pt={2} fontSize='xs'  color={"red.200"}>이미 끝난 일정은 완료로 변경 해 주세요</Text>: null}
-      </Box>
-      <Box>
-        <Heading size='xs' textTransform='uppercase'>
-          limit date
-        </Heading>
-        <Text pt='2' fontSize='sm'>
-          {taskData? DateToString(taskData?.limit_date) : null}
-            </Text>
-
-      </Box>
-      {taskData?.author.pk != user?.pk ? null : 
-        <HStack justifyContent={"flex-end"}>
-          <Button onClick={onOpen} size="sm">Edit</Button>
-          <Button onClick={deleteSubmit} colorScheme={"red"} size="sm">Delete</Button>
-        </HStack>
-      }
-    </Stack>
+            {taskData?.status === "yet" ? <Text pt={2} fontSize='xs' color={"red.200"}>진행중으로 변경 해 주세요</Text>: null}
+            {taskData?.status === "doing" ? <Text pt={2} fontSize='xs'  color={"red.200"}>이미 끝난 일정은 완료로 변경 해 주세요</Text>: null}
+        </Box>
+        <Box>
+          <Heading size='xs' textTransform='uppercase'>
+            limit date
+          </Heading>
+          <Text pt='2' fontSize='sm'>
+            {taskData? DateToString(taskData?.limit_date) : null}
+          </Text>
+        </Box>
+        {taskData?.author.pk != user?.pk ? null : 
+          <HStack justifyContent={"flex-end"}>
+            <Button onClick={onOpen} size="sm">Edit</Button>
+            <Button onClick={deleteSubmit} colorScheme={"red"} size="sm">Delete</Button>
+          </HStack>
+        }
+      </Stack>
 
             <TaskEditModal
               isOpen={isOpen}
-            onClose={onClose}
-            pk={pk}
+              onClose={onClose}
+              pk={pk}
               type={taskData?.type}
               status={taskData?.status}
               content={taskData?.content}
-            limit_date={taskData?.limit_date}
-            group_pk={taskData?.group.pk}
-            group_name={taskData?.group?.group_name}
-            tasker={taskData?.tasker}
+              limit_date={taskData?.limit_date}
+              group_name={taskData?.group?.group_name}
+              tasker={taskData?.tasker}
             />
 
-  </CardBody>
-        </Card>
+    </CardBody>
+    </Card>
 
-      <VStack>
-        {commentData?.map((comment) => (
-          <Comment
-            key={comment.pk}
-            pk={comment.pk}
-            task={pk}
-            author={comment.author}
-            content={comment.content}
-            created_at={comment.created_at}
-          />
-        ))}
-        <InputGroup as="form" onSubmit={handleSubmit(onSubmit)}>
-            <InputLeftAddon children={<BiChat />}/>
-          <Input placeholder="comment here..." {...register("content")} />
-                <InputRightElement width='4rem'>   
-            <Button flex='1' variant='ghost' rightIcon={<FiSend />} type="submit"/>
-            </InputRightElement> 
-        </InputGroup>
-      </VStack>
-        </HStack>
+    <VStack>
+      {commentData?.map((comment) => (
+        <Comment
+          key={comment.pk}
+          pk={comment.pk}
+          task={pk}
+          author={comment.author}
+          content={comment.content}
+          created_at={comment.created_at}
+        />
+      ))}
+      <InputGroup as="form" onSubmit={handleSubmit(onSubmit)}>
+          <InputLeftAddon children={<BiChat />}/>
+        <Input placeholder="comment here..." {...register("content")} />
+              <InputRightElement width='4rem'>   
+          <Button flex='1' variant='ghost' rightIcon={<FiSend />} type="submit"/>
+          </InputRightElement> 
+      </InputGroup>
+    </VStack>
+    </Stack>
     )
 }

@@ -1,7 +1,7 @@
-import { Badge, Box, Button, Checkbox, Circle, Flex, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, useDisclosure, VStack } from "@chakra-ui/react";
+import { Button, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, VStack } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useQueryClient, useMutation } from '@tanstack/react-query'
-import { editTask, EditTaskVariables, TaskVariables } from "../api";
+import { editTask, EditTaskVariables } from "../api";
 import { DateToString } from "../lib/utils";
 import { GroupMembers, WorkGroup } from "../types";
 import { useEffect, useState } from "react";
@@ -19,11 +19,10 @@ interface TaskDetailProps {
     limit_date: string | undefined;
     group_name: string | undefined;
     tasker: GroupMembers | undefined;
-    group_pk: number | undefined;
 }
 
-export default function TaskEditModal({ isOpen, onClose, pk, type, status, content, limit_date, group_name, tasker, group_pk }: TaskDetailProps) {
-     const { isGroupLoading, groupData } = useWorkgroups()
+export default function TaskEditModal({ isOpen, onClose, pk, type, status, content, limit_date, group_name, tasker }: TaskDetailProps) {
+    const { isGroupLoading, groupData } = useWorkgroups()
     const { register, watch, reset, handleSubmit } = useForm<EditTaskVariables>()
     const [taskType, setTaskType] = useState("");
     const [groupIndex, setGroupIndex] = useState(0);
@@ -31,7 +30,10 @@ export default function TaskEditModal({ isOpen, onClose, pk, type, status, conte
     useEffect(() => {
         if (type === "task") {
             setTaskType(type)
-    }}, [type])
+        }
+    }, [type])
+    
+    // 일정수정
     const mutation = useMutation(editTask, {
         onSuccess: (data) => {
             console.log(data)
@@ -47,7 +49,6 @@ export default function TaskEditModal({ isOpen, onClose, pk, type, status, conte
         mutation.mutate({type, tasker, content, status, limit_date, pk, groupPk})
     }
 
-console.log(watch())
     return (
                         <Modal isOpen = { isOpen } onClose = { onClose }>
                     <ModalOverlay/>
