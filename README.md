@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# GOOD-DAY
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+---
 
-## Available Scripts
+☀️🎶 make your day better...[good-day!](https://good-day.today/)
 
-In the project directory, you can run:
+##### 🚩 프로젝트소개
+- 개인 또는 그룹 간 일정관리 공유 사이트
 
-### `npm start`
+##### 🗓️ 개발기간
+- 2022.12. (for 2wks) 
+But...continuing to update
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##### 🤝 멤버구성
+- 1인 프로젝트
+Role: 기획 - 배포
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+##### 🛠 ️개발환경 
+- ️➡️ Backend : [소스코드](https://github.com/bh224/GOOD-DAY)
+Python 3.9
+Django 4.14
+Django Rest Framwork
+- ️➡️ Frontend 
+ReactJS
+TypeScript
+ChakraUI
+- ️➡️ Database
+MySQL
+![ERD_221227](https://user-images.githubusercontent.com/104023868/209669433-b89f7946-496d-46e9-a4c8-b81b98bcf822.jpg)
 
-### `npm test`
+##### 🌏 배포
+- AWS EC2
+Nginx
+Gunicorn
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+##### 📌 주요기능
+- 로그인
+-- ID중복검사 
+-- 구글, 네이버, 카카오 소셜로그인
+- 일정등록 및 관리
+-- task(그룹일정) / todo / private 일정 타입 분리
+-- yet(그룹일정) / doing / done 일정 진행상황 관리
+-- 오늘의 일정 진행률 표시
+-- 과거에 등록한 일정 날짜별 조회
 
-### `npm run build`
+- 그룹일정
+-- 그룹 유저에게 일정 부여
+-- 그룹 유저간 일정 및 투데이(on/off) 표시
+-- 내가 가입한 그룹 유저의 오늘 일정 확인
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
