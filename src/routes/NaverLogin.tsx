@@ -35,10 +35,10 @@ export default function NaverLogin() {
     }, [])
 
     return (
-        <VStack alignItems={"center"} mt={100}>
+        <VStack alignItems={"center"} pt={200}>
             <Heading> Logging with Naver </Heading>
-            <Text> Please wait ...</Text>
             <Spinner size={"md"}></Spinner>
+            <Text> Please wait ...</Text>
         </VStack>
     )
 }

@@ -11,18 +11,18 @@ export default function GoogleLogin() {
     const navigate = useNavigate()
     const params = new URLSearchParams(search)
     const code = params.get("code")
-    console.log(code)
+    // console.log(code)
     const confirmLogin = async () => {
         if (code) {
             const status = await googleLogin(code);
             if (status === 200) {
-                console.log("google login")
-                // toast({
-                //     status: "success",
-                //     description: "로그인 성공",
-                //     duration: 2000,
-                //     isClosable: true
-                // })
+                // console.log("google login")
+                toast({
+                    status: "success",
+                    description: "로그인 성공",
+                    duration: 2000,
+                    isClosable: true
+                })
             }
             queryClient.refetchQueries(['user'])
             navigate("/")
@@ -33,10 +33,10 @@ export default function GoogleLogin() {
     }, [])
 
     return (
-        <VStack alignItems={"center"} mt={100}>
+        <VStack alignItems={"center"} pt={200}>
             <Heading> Logging with Google </Heading>
-            <Text> Please wait ...</Text>
             <Spinner size={"md"}></Spinner>
+            <Text> Please wait ...</Text>
         </VStack>
     )
 }

@@ -4,14 +4,15 @@ import { QueryFunctionContext } from "@tanstack/react-query";
 import { formatDate, TimeNow } from "./lib/utils";
 
 const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/api/v1/",
+    baseURL: process.env.REACT_APP_HOST,
+    // baseURL: "http://127.0.0.1:8000/api/v1/",
     // baseURL: "https://good-day.today/api/v1/",
     withCredentials: true, //세션id 
 })
 
 export const getTasks = () => instance.get("tasks/").then((response) => response.data)
-export const getTaskTome = () => instance.get("tasks/tome").then((response) => response.data)
-export const allTasks = () => instance.get("tasks/all").then((response) => response.data)
+export const getTaskTome = () => instance.get("tasks/tome/").then((response) => response.data)
+export const allTasks = () => instance.get("tasks/all/").then((response) => response.data)
 export const dailyTask = (date:string) => instance.get(`tasks/all?created_at=${date}`).then((response) => response.data)
 export const groupTasks = (pk:string) => instance.get(`tasks/group/${pk}`).then((response)=>response.data)
 export const getUser = () => instance.get("users/me").then((response) => response.data)
@@ -160,7 +161,6 @@ export const editTask = ({type, tasker, content, status, limit_date, pk, groupPk
     ).then((response) => response.data)
 
 export const deleteTask = (pk:string | undefined) => {
-    console.log("api>>>", pk)
     return instance.delete(
         `tasks/${pk}`,
         {

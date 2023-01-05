@@ -31,10 +31,10 @@ export default function KakaoLogin() {
     }, [])
 
     return (
-        <VStack alignItems={"center"} mt={100}>
+        <VStack alignItems={"center"} pt={200}>
             <Heading> Logging with Kakao </Heading>
-            <Text> Please wait ...</Text>
             <Spinner size={"md"}></Spinner>
+            <Text> Please wait ...</Text>
         </VStack>
     )
 }
