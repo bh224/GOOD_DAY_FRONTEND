@@ -32,7 +32,7 @@ export default function AllGroup() {
         }
     })
     const onSubmit = ({ group_name, description }:CreateGroupVariables) => {
-        console.log(group_name, description)
+        // console.log(group_name, description)
         mutation.mutate({ group_name, description })
     }
     return (

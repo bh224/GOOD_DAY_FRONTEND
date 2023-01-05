@@ -1,5 +1,9 @@
-export const formatDate = (date: Date) => 
-    `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+export const formatDate = (date: Date) => {
+    const year = date.getFullYear()
+    const month = ("0" + (1 + date.getMonth())).slice(-2)
+    const day = ("0" + date.getDate()).slice(-2)
+    return `${year}-${month}-${day}`
+}
 
 export const DateToString = (date: string) =>
     date.split("T")[0]

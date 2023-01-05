@@ -19,20 +19,17 @@ export default function MyPage() {
     const { register, watch, reset, handleSubmit } = useForm<EditUserVariables>();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const queryClient = useQueryClient();
-    console.log(watch())
     const mutation = useMutation(updateUser, {
         onSuccess: (data) => {
-            console.log(data)
             reset()
             onClose()
             queryClient.refetchQueries(['user'])
         },
         onError: (error) => {
-            console.log(error)
+            // console.log(error)
         }
     })
     const onSubmit = ({ nickname, email}:EditUserVariables) => {
-        console.log(nickname, email)
         mutation.mutate({nickname, email})
     }
     return (

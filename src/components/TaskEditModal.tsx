@@ -36,13 +36,13 @@ export default function TaskEditModal({ isOpen, onClose, pk, type, status, conte
     // 일정수정
     const mutation = useMutation(editTask, {
         onSuccess: (data) => {
-            console.log(data)
+            // console.log(data)
             reset()
             onClose()
             queryClient.refetchQueries(['task'])
         },
         onError: (error) => {
-            console.log(error)
+            // console.log(error)
         }
     })
     const onSubmit = ({type, tasker, content, status, limit_date, groupPk}: EditTaskVariables) => {

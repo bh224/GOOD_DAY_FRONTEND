@@ -21,6 +21,7 @@ import { GroupMembersStatus } from "../types";
 import { formatDate, StatusTime, TimeNow } from "../lib/utils";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
+
 export default function Header() {
   const now = TimeNow(new Date())
   const { groupData } = useWorkgroups()
@@ -52,7 +53,8 @@ export default function Header() {
   const { isOpen: isSignupOpen, onOpen: onSignupOpen, onClose: onSignupClose } = useDisclosure();
   const instance = axios.create({
     // baseURL: "https:/good-day.today/api/v1/",
-    baseURL: "http://127.0.0.1:8000/api/v1/",
+    // baseURL: "http://127.0.0.1:8000/api/v1/",
+    baseURL: process.env.REACT_APP_HOST,
     withCredentials: true, 
   })
 
@@ -66,11 +68,11 @@ export default function Header() {
   // 투데이 start-end
   const startMutation = useMutation(startToday, {
     onSuccess: (data) => {
-      console.log(data)
+      // console.log(data)
       queryClient.refetchQueries(["today"])
     },
     onError: (error) => {
-      console.log(error)
+      // console.log(error)
     }
   })
   const submitStart = () => {
@@ -80,15 +82,15 @@ export default function Header() {
   }
   const endMutation = useMutation(endToday, {
     onSuccess: (data) => {
-      console.log(data)
+      // console.log(data)
       queryClient.refetchQueries(["today"])
     },
     onError: (error) => {
-      console.log(error)
+      // console.log(error)
     }
   })
   const submitEnd = () => {
-    console.log("click")
+    // console.log("click")
     const state_code = "off"
     const end_time = now
     endMutation.mutate({state_code, end_time})

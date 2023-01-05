@@ -32,7 +32,7 @@ export default function GroupDetail() {
     const joinGroupSubmit = async() => {
       let member_pk = ""
       if (addUserWatch().member_pk) {
-          console.log("멤버추가")
+          // console.log("멤버추가")
           member_pk = addUserWatch().member_pk
       }
       const response = await joinWorkgroup({ pk, member_pk })
@@ -59,7 +59,7 @@ export default function GroupDetail() {
         const response = await checkUsername({ username })
         setAppendChk(!appendChk)
         setChkBox([<Checkbox value={response.pk} {...addUserRegister("member_pk")}>{response.nickname}</Checkbox>])
-        console.log(chkBox)
+        // console.log(chkBox)
     }
     const onSubmitId = () => {
         const username = idSearchWatch().username
