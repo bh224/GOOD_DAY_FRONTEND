@@ -10,33 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout source code
-        uses: actions/checkout@v2
+      - run: ls -al
+      - uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: yarn install
+      # - name: Install Dependencies
+      #   run: yarn install
 
-      - name: Setting .env
-      run: |
-        echo "REACT_APP_GOOGLE_CLIENTID=${{ secrets.REACT_APP_HOST }}" >> .env
-        echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_REDIRECT_GOOGLE }}" >> .env
-        echo "REACT_APP_KAKAO_REDIRECT=${{ secrets.REACT_APP_REDIRECT_KAKAO }}" >> .env
-        echo "REACT_APP_KAKAO_CLIENTID=${{ secrets.REACT_APP_REDIRECT_NAVER }}" >> .env
-        cat .env
+      # - name: Setting .env
+      # run: |
+      #   echo "REACT_APP_GOOGLE_CLIENTID=${{ secrets.REACT_APP_HOST }}" >> .env
+      #   echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_REDIRECT_GOOGLE }}" >> .env
+      #   echo "REACT_APP_KAKAO_REDIRECT=${{ secrets.REACT_APP_REDIRECT_KAKAO }}" >> .env
+      #   echo "REACT_APP_KAKAO_CLIENTID=${{ secrets.REACT_APP_REDIRECT_NAVER }}" >> .env
+      #   cat .env
 
-      - name: Build
-      run: yarn build
+      # - name: Build
+      # run: yarn build
 
-      - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ secrets.AWS_REGION }}
+      # - name: Configure AWS Credentials
+      # uses: aws-actions/configure-aws-credentials@v1
+      # with:
+      #   aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #   aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Deploy to S3
-      run: aws s3 sync ./dist s3://${{ secrets.DEV_AWS_S3_BUCKET }} --delete
+      # - name: Deploy to S3
+      # run: aws s3 sync ./dist s3://${{ secrets.DEV_AWS_S3_BUCKET }} --delete
 
-      - name: Invalidate CloudFront Cache
-      run: aws cloudfront create-invalidation --distribution-id ${{secrets.DEV_AWS_DISTRIBUTION_ID}} --paths "/*"
+      # - name: Invalidate CloudFront Cache
+      # run: aws cloudfront create-invalidation --distribution-id ${{secrets.DEV_AWS_DISTRIBUTION_ID}} --paths "/*"
 
