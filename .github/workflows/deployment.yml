@@ -14,16 +14,16 @@ jobs:
       - run: ls -al
       - run: cat .github/workflows/deployment.yml
 
-      # - name: Install Dependencies
-      #   run: yarn install
+      - name: Install Dependencies
+        run: yarn install
 
-      # - name: Setting .env
-      # run: |
-      #   echo "REACT_APP_GOOGLE_CLIENTID=${{ secrets.REACT_APP_HOST }}" >> .env
-      #   echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_REDIRECT_GOOGLE }}" >> .env
-      #   echo "REACT_APP_KAKAO_REDIRECT=${{ secrets.REACT_APP_REDIRECT_KAKAO }}" >> .env
-      #   echo "REACT_APP_KAKAO_CLIENTID=${{ secrets.REACT_APP_REDIRECT_NAVER }}" >> .env
-      #   cat .env
+      - name: Setting .env
+      run: |
+        echo "REACT_APP_GOOGLE_CLIENTID=${{ secrets.REACT_APP_HOST }}" >> .env
+        echo "REACT_APP_API_DOMAIN=${{ secrets.REACT_APP_REDIRECT_GOOGLE }}" >> .env
+        echo "REACT_APP_KAKAO_REDIRECT=${{ secrets.REACT_APP_REDIRECT_KAKAO }}" >> .env
+        echo "REACT_APP_KAKAO_CLIENTID=${{ secrets.REACT_APP_REDIRECT_NAVER }}" >> .env
+        cat .env
 
       # - name: Build
       # run: yarn build
