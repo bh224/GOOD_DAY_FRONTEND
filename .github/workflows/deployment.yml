@@ -38,6 +38,9 @@ jobs:
 
       - name: 빌드파일위치
         run: ls -la
+      
+      - name: 빌드파일위치
+        run: pwd
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
