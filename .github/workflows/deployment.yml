@@ -8,14 +8,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v3
-      - run: ls -al
-      - run: cat .github/workflows/deployment.yml
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Install Dependencies
-        run: yarn install
+      - name: Set up Node.js 
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Setting .env
         run: |
@@ -26,7 +33,7 @@ jobs:
           cat .env
 
       - name: Build
-        run: yarn build
+        run: npm run build
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
