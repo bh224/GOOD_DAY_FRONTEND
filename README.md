@@ -2,7 +2,7 @@
 
 
 
-☀️🎶 make your day better...[good-day!](https://good-day.today/)
+☀️🎶 make your day better...[good-day!](https://www.good-day.today/)
 
 ##### 🚩 프로젝트소개
 - 개인 또는 그룹 간 일정관리 공유 사이트
@@ -29,9 +29,13 @@ MySQL
 ![ERD_221227](https://user-images.githubusercontent.com/104023868/209669433-b89f7946-496d-46e9-a4c8-b81b98bcf822.jpg)
 
 ##### 🌏 배포
-- AWS EC2
+- 백엔드 
+  - AWS EC2
   - Nginx
   - Gunicorn
+- 프론트엔드
+  - AWS S3 + CloudFront + Route53
+  - Github Actions
 
 ##### 📌 주요기능
 - 로그인
