@@ -26,7 +26,6 @@ export default function MyPage() {
             queryClient.refetchQueries(['user'])
         },
         onError: (error) => {
-            // console.log(error)
         }
     })
     const onSubmit = ({ nickname, email}:EditUserVariables) => {

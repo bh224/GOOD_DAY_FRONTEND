@@ -20,13 +20,12 @@ export default function TaskDetail() {
   const { isLoading: isTaskLoading, data: taskData } = useQuery<TaskDetails>(['task', pk], getTask);
   const { data: commentData } = useQuery<CommentDetails[]>(['comment', pk], getComment)
   const {register, watch, handleSubmit, reset} = useForm()
-    // console.log(watch())
   const { isOpen, onOpen, onClose } = useDisclosure()
   const queryClient = useQueryClient();
 
   // 일정삭제
   const deleteMutation = useMutation(deleteTask, {
-    onSuccess: () => {
+    onSuccess: (res) => {
     toast({
         status: "success",
         title: "삭제되었습니다",
@@ -40,7 +39,6 @@ export default function TaskDetail() {
         title: error.response.data.detail,
         isClosable: true
       })
-      // console.log(error.response.data)
     }
   })
   const deleteSubmit = async () => {
@@ -62,7 +60,6 @@ export default function TaskDetail() {
           status: "error",
           title: "다시 시도해 주세요",
         })
-      // console.log("error")
     }
   })
   const onSubmit = (data:any) => {
@@ -142,10 +139,10 @@ export default function TaskDetail() {
         <Comment
           key={comment.pk}
           pk={comment.pk}
-          task={pk}
           author={comment.author}
           content={comment.content}
           created_at={comment.created_at}
+          task = {pk}
         />
       ))}
       <InputGroup as="form" onSubmit={handleSubmit(onSubmit)}>

@@ -10,8 +10,7 @@ import { CommentDetails } from "../types";
 import { deleteComment } from "../api";
 
 
-export default function Comment({ pk, task, author, content, created_at }: CommentDetails) {
-    // console.log('pk',pk, 'task', task)
+export default function Comment({ pk, author, content, created_at, task }: CommentDetails) {
   const toast = useToast();
   const queryClient = useQueryClient();
   // 코멘트삭제
@@ -23,7 +22,7 @@ export default function Comment({ pk, task, author, content, created_at }: Comme
         })
       queryClient.refetchQueries(['comment'])
       },
-      onError: ({response}) => {
+    onError: ({ response }) => {
       toast({
         status: "error",
         title: "다시 시도해 주세요"
@@ -31,8 +30,7 @@ export default function Comment({ pk, task, author, content, created_at }: Comme
       }
   })
     const deleteSubmit = () => {
-        console.log(pk, task)
-        mutation.mutate({pk, task})
+        mutation.mutate({task, pk})
     }
     return (
 

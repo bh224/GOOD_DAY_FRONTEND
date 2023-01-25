@@ -1,16 +1,13 @@
-import { Box, Button, Circle, Divider, HStack, Image, Img, VStack } from "@chakra-ui/react";
-import { BsChatFill, BsEnvelope } from "react-icons/bs";
+import { Box, Button, Divider, HStack, VStack } from "@chakra-ui/react";
+import { BsChatFill } from "react-icons/bs";
 import { FcGoogle } from "react-icons/fc";
-import { Link } from "react-router-dom";
 
 export default function SocialLogin() {
-    console.log(process.env.REACT_APP_REDIRECT_KAKAO)
     const kakaoParams = {
         client_id: "90eb4807776054920da36cf74a9b006e",
         response_type: "code",
     }
     const kakao = new URLSearchParams(kakaoParams).toString();
-    console.log(kakao)
     const googleParams = {
         client_id: "1051453023789-boperin529q0af3mf1idkqlplqmt60hs.apps.googleusercontent.com",
         // redirect_uri: process.env.REACT_APP_REDIRECT_GOOGLE,
@@ -22,10 +19,9 @@ export default function SocialLogin() {
         response_type: "code",
         client_id: "qW_D7ntXsDAXdVlaJf2B",
         // redirect_uri: process.env.REACT_APP_REDIRECT_NAVER,
-        state: "H1GRM1ofvYKBwEtxe2bjHyulgdOlTd3u" // todo 나중에 랜덤값으로 변경
+        state: "H1GRM1ofvYKBwEtxe2bjHyulgdOlTd3u" 
     }
     const naver = new URLSearchParams(naverParams).toString();
-    // console.log(naver)
     return (
         <Box>
             <HStack h={10}>
