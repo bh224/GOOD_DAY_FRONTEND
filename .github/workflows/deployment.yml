@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
 
-      - name: Setting .env
+      - name: Setting .env파일
         run: |
           echo "REACT_APP_HOST=$REACT_APP_HOST" >> .env.production
           echo "REACT_APP_GOOGLE_CLIENTID=$REACT_APP_HOST" >> .env.production
@@ -30,6 +30,14 @@ jobs:
           echo "REACT_APP_KAKAO_REDIRECT=$REACT_APP_REDIRECT_KAKAO" >> .env.production
           echo "REACT_APP_KAKAO_CLIENTID=$REACT_APP_REDIRECT_NAVER" >> .env.production
           echo "REACT_STATE_CODE=$REACT_STATE_CODE" >> .env.production
+
+        env:
+          REACT_APP_HOST: ${{ secrets.REACT_APP_DOMAIN }}
+          REACT_APP_GOOGLE_CLIENTID: ${{ secrets.REACT_APP_GOOGLE_CLIENTID }}
+          REACT_APP_API_DOMAIN: ${{ secrets.REACT_APP_API_DOMAIN }}
+          REACT_APP_KAKAO_REDIRECT: ${{ secrets.REACT_APP_KAKAO_REDIRECT }}
+          REACT_APP_KAKAO_CLIENTID: ${{ secrets.REACT_APP_KAKAO_CLIENTID }}
+          REACT_STATE_CODE: ${{ secrets.REACT_STATE_CODE }}
           cat .env.production
 
       - name: Install dependencies
