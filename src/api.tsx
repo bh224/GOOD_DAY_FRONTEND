@@ -5,19 +5,47 @@ import { formatDate, TimeNow } from "./lib/utils";
 
 const instance = axios.create({
     baseURL: process.env.REACT_APP_HOST,
-    // baseURL: "http://127.0.0.1:8000/api/v1/",
-    // baseURL: "https://good-day.today/api/v1/",
     withCredentials: true, //세션id 
 })
 
 export const getTasks = () => instance.get("tasks/").then((response) => response.data)
-export const getTaskTome = () => instance.get("tasks/tome/").then((response) => response.data)
-export const allTasks = () => instance.get("tasks/all/").then((response) => response.data)
-export const dailyTask = (date:string) => instance.get(`tasks/all?created_at=${date}`).then((response) => response.data)
+export const getMyGroupTask = () => instance.get("tasks/my-group/").then((response) => response.data)
+export const getDateList = ({ queryKey }: QueryFunctionContext) => {
+    const p = queryKey[1]
+    return instance.get(`tasks/date-list/?page=${p}`).then((response) => response.data)
+}
+export const getDatePageList = () => instance.get("tasks/pages/").then((response) => response.data)
+export const getGroupPageList = () => instance.get("users/workgroups/pages").then((response) => response.data)
+
+// export const tasksPerPage = (page:string) => instance.get(`tasks/all/?page=${page}`).then((response) => response.data)
+
+export const dailyTask = (date:string) => instance.get(`tasks/daily-task?created_at=${date}`).then((response) => response.data)
 export const groupTasks = (pk:string) => instance.get(`tasks/group/${pk}`).then((response)=>response.data)
 export const getUser = () => instance.get("users/me").then((response) => response.data)
-//그룹불러오기
-export const getWorkgroups = () => instance.get("users/workgroups").then((response) => response.data)
+
+export const getTask = ({ queryKey }: QueryFunctionContext) => {
+    const pk = queryKey[1]
+    return instance.get(`tasks/${pk}/`).then((response)=>response.data)
+}
+
+export const tasksCounts = () => instance.get("tasks/progress").then((response)=>response)
+
+export const getComment = ({ queryKey }: QueryFunctionContext) => {
+    const pk = queryKey[1]
+    return instance.get(`tasks/${pk}/comments/`).then((response)=>response.data)
+}
+
+// 가입한 그룹불러오기
+export const getWorkgroups = ({ queryKey }: QueryFunctionContext) => {
+    const page = queryKey[1]
+    return instance.get(`users/workgroups?page=${page}`).then((response) => response.data)
+}
+
+// 모든그룹불러오기
+export const getAllGroups = ({ queryKey }: QueryFunctionContext) => {
+    const page = queryKey[1]
+    return instance.get(`users/workgroups/all?page=${page}`).then((response) => response.data)
+}
 
 //authentication
 export const logOut = () => instance.post("users/logout", null, {
@@ -48,11 +76,23 @@ export const logIn = ({username, password}:LoginVariables) => instance.post("use
 export interface CheckUsername {
     username: string;
 }
-export const checkUsername = ({ username }:CheckUsername) => instance.post("users/check_username", { username }, {
+export const checkUsername = ({ username }:CheckUsername) => instance.post("users/check-username", { username }, {
     headers: {
         "X-CSRFToken": Cookie.get("csrftoken") || ""
     }
 }).then((response) => response.data)
+
+// 그룹 가입 중복확인
+export interface CheckGroupUsername {
+    username: string;
+    pk: string | undefined;
+}
+export const checkUsernameForGroup = ({ username, pk }:CheckGroupUsername) => instance.post("users/workgroups/check-username", { username, pk }, {
+    headers: {
+        "X-CSRFToken": Cookie.get("csrftoken") || ""
+    }
+}).then((response) => response.data)
+
 
 export interface SignupVariables {
     email: string | null;
@@ -162,7 +202,7 @@ export const editTask = ({type, tasker, content, status, limit_date, pk, groupPk
 
 export const deleteTask = (pk:string | undefined) => {
     return instance.delete(
-        `tasks/${pk}`,
+        `tasks/${pk}/`,
         {
             headers: {
             "X-CSRFToken": Cookie.get("csrftoken") || ""
@@ -170,17 +210,7 @@ export const deleteTask = (pk:string | undefined) => {
     ).then((response)=>response.data)
 }
 
-export const getTask = ({ queryKey }: QueryFunctionContext) => {
-    const pk = queryKey[1]
-    return instance.get(`tasks/${pk}`).then((response)=>response.data)
-}
 
-export const tasksCounts = () => instance.get("tasks/tasks-counts").then((response)=>response)
-
-export const getComment = ({ queryKey }: QueryFunctionContext) => {
-    const pk = queryKey[1]
-    return instance.get(`tasks/${pk}/comments`).then((response)=>response.data)
-}
 
 export interface CommentVariables {
     pk: string | undefined;
@@ -253,8 +283,7 @@ export const endToday = ({ state_code, end_time }:EndTodayVariables) => {
     ).then((response) => response.data)
 }
 
-// 모든그룹불러오기
-export const getAllGroups = () => instance.get("users/workgroups?filter=all").then((response)=>response.data)
+
 
 export interface CreateGroupVariables {
     group_name: string;

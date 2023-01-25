@@ -1,8 +1,8 @@
 import { Card, CardBody, VStack, Image, Stack, Heading, Text, Button, HStack } from '@chakra-ui/react'
 import { Link } from 'react-router-dom';
-import { WorkGroup } from '../types';
+import { AllWorkGroupList } from '../types';
 
-export default function Group({pk, group_name, group_code, description, members, is_member}:WorkGroup) {
+export default function Group({pk, group_name, group_code, description, member_cnt, is_member}:AllWorkGroupList) {
     return (
         <Link to={`group/${pk}`}>
         <Card
@@ -24,7 +24,7 @@ export default function Group({pk, group_name, group_code, description, members,
                 <VStack alignItems={"flex-start"}>
                     <HStack justifyContent={"space-between"} w="100%" h="100%">
                         <Heading size={ 'md'} fontSize={{ base: "xs", md: "md" }} >{ group_name}</Heading>
-                        <Text display={{base: "none", md: "inline-block"}} py='2' fontSize={"sm"}>함께하는 멤버 {members.length}</Text>
+                        <Text display={{base: "none", md: "inline-block"}} py='2' fontSize={"sm"}>함께하는 멤버 {member_cnt}</Text>
                     </HStack>
                     <Text flexBasis={{base: "4", md: "50"}} my='2' fontSize={{base: "2xs", md: "md"}} noOfLines={1}>
                         {description}

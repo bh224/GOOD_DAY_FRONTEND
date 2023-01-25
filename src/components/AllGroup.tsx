@@ -1,14 +1,17 @@
-import { VStack, Text, Button, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, InputGroup, Input, InputLeftAddon, useToast, } from '@chakra-ui/react'
+import { VStack, Text, Button, useDisclosure, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, InputGroup, Input, InputLeftAddon, useToast, HStack, } from '@chakra-ui/react'
 import { ChatIcon } from '@chakra-ui/icons'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { createGroup, CreateGroupVariables, getAllGroups } from '../api';
-import { WorkGroup } from '../types';
+import { AllWorkGroupList } from '../types';
 import { useForm } from 'react-hook-form';
 import Group from './Group';
+import { useState } from 'react';
 
 
-export default function AllGroup() {
-    const { isLoading, data } = useQuery<WorkGroup[]>(['allgroups'], getAllGroups);
+export default function AllGroup({ totalpage }: any) {
+    const [page, setPage] = useState("1");
+    const { isLoading, data } = useQuery<AllWorkGroupList[]>(['allGroups', page], getAllGroups);
+
     const queryClient = useQueryClient();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { register, watch, reset, handleSubmit } = useForm<CreateGroupVariables>();
@@ -22,7 +25,7 @@ export default function AllGroup() {
             })
             reset()
             onClose()
-            queryClient.refetchQueries(['allgroups'])
+            queryClient.refetchQueries(['myGroups'])
         },
         onError: (error) => {
             toast({
@@ -32,7 +35,6 @@ export default function AllGroup() {
         }
     })
     const onSubmit = ({ group_name, description }:CreateGroupVariables) => {
-        // console.log(group_name, description)
         mutation.mutate({ group_name, description })
     }
     return (
@@ -43,15 +45,23 @@ export default function AllGroup() {
                     <Group
                         key={group.pk}
                         pk={group.pk}
-                        member={group.member}
                         group_code={group.group_code}
                         group_name={group.group_name}
-                        members={group.members}
                         is_member={group.is_member}
                         description={group.description}
+                        member_cnt={group.member_cnt}
                     />
                 ))}
             </VStack>
+            <HStack>
+                {totalpage.map((page: number, idx: number)=>(
+                    <Button size={"xs"} key={idx} id={page.toString()} onClick={(e) => {
+                        const target = e.target as HTMLDivElement
+                        // requestPage(target.id)
+                        setPage(target.id)
+                    }}>{page}</Button>
+                ))}
+            </HStack>
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay/>
             <ModalContent>
