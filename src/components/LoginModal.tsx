@@ -26,7 +26,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     onSuccess: (data) => {
       toast({
         status: "success",
-        description: data.ok,
+        description: data.detail,
         isClosable: true,
         duration: 2000,
       })
