@@ -11,12 +11,10 @@ export default function GoogleLogin() {
     const navigate = useNavigate()
     const params = new URLSearchParams(search)
     const code = params.get("code")
-    // console.log(code)
     const confirmLogin = async () => {
         if (code) {
             const status = await googleLogin(code);
             if (status === 200) {
-                // console.log("google login")
                 toast({
                     status: "success",
                     description: "로그인 성공",

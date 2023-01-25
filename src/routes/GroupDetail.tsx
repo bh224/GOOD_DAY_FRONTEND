@@ -1,7 +1,7 @@
-import { Heading, VStack, Text, HStack, Card, CardHeader, CardBody, Box, Stack, StackDivider, Button, Image, IconButton, Avatar, Flex, Input, useDisclosure, InputGroup, InputRightElement, InputLeftElement, InputLeftAddon,Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useToast, Checkbox } from "@chakra-ui/react";
+import { Heading, VStack, Text, HStack, Card, CardHeader, CardBody, Box, Stack, StackDivider, Button, Avatar, Input, useDisclosure, InputGroup, InputRightElement, InputLeftElement, InputLeftAddon,Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, useToast, Checkbox } from "@chakra-ui/react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import { getGroup, joinWorkgroup, leaveWorkgroup, checkUsername, CheckUsername, deleteWorkgroup, EditGroupVariables, editWorkgroup } from "../api";
+import {useQueryClient, useQuery } from "@tanstack/react-query";
+import { getGroup, joinWorkgroup, leaveWorkgroup, checkUsernameForGroup, CheckGroupUsername, deleteWorkgroup, EditGroupVariables, editWorkgroup } from "../api";
 import { WorkGroup } from "../types";
 import { useForm } from "react-hook-form";
 import { FcPortraitMode } from "react-icons/fc";
@@ -32,7 +32,6 @@ export default function GroupDetail() {
     const joinGroupSubmit = async() => {
       let member_pk = ""
       if (addUserWatch().member_pk) {
-          // console.log("멤버추가")
           member_pk = addUserWatch().member_pk
       }
       const response = await joinWorkgroup({ pk, member_pk })
@@ -55,15 +54,19 @@ export default function GroupDetail() {
       navigate("/")
     }
     // 추가할 유저 검색
-    const searchUsername = async ({ username }: CheckUsername) => {
-        const response = await checkUsername({ username })
-        setAppendChk(!appendChk)
-        setChkBox([<Checkbox value={response.pk} {...addUserRegister("member_pk")}>{response.nickname}</Checkbox>])
-        // console.log(chkBox)
+  const searchUsername = async ({ username, pk }: CheckGroupUsername) => {
+      const response = await checkUsernameForGroup({ username, pk })
+    if (response.detail) {
+      setAppendChk(!appendChk)
+      setChkBox([<Text>{response.detail}</Text>])
+    } else {
+      setAppendChk(!appendChk)
+      setChkBox([<Checkbox value={response.pk} {...addUserRegister("member_pk")}>{response.nickname}</Checkbox>])
     }
-    const onSubmitId = () => {
-        const username = idSearchWatch().username
-        searchUsername({username})
+    }
+  const onSubmitId = () => {
+      const username = idSearchWatch().username
+      searchUsername({ username, pk })
   }
     // 그룹 삭제하기
   const deleteGroupSubmit = async() => {

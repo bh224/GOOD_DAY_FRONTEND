@@ -22,7 +22,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
   const toast = useToast()
   const toastId = useRef<ToastId>()
   const { register, handleSubmit, watch, reset, formState: {errors} } = useForm<LoginForm>();
-  // console.log(watch())
   const mutation = useMutation(logIn, {
     onSuccess: (data) => {
       toast({
@@ -45,7 +44,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     }
   })
   const onSubmit = ({username, password}:LoginForm) => {
-    // console.log(username, password)
     mutation.mutate({username, password})
   }
     return (

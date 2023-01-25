@@ -8,13 +8,10 @@ export default function NaverLogin() {
     const toast = useToast()
     const queryClient = useQueryClient();
     const { search } = useLocation()
-    console.log(search)
     const navigate = useNavigate()
     const params = new URLSearchParams(search)
     const code = params.get("code")
     const state = params.get("state")
-    // console.log(code)
-    // console.log(state)
     const confirmLogin = async () => {
         if (code) {
             const status = await naverLogin(code);

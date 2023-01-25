@@ -1,4 +1,4 @@
-import { Button, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, VStack } from "@chakra-ui/react";
+import { Button, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, VStack, useToast } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useQueryClient, useMutation } from '@tanstack/react-query'
 import { editTask, EditTaskVariables } from "../api";
@@ -22,7 +22,8 @@ interface TaskDetailProps {
 }
 
 export default function TaskEditModal({ isOpen, onClose, pk, type, status, content, limit_date, group_name, tasker }: TaskDetailProps) {
-    const { isGroupLoading, groupData } = useWorkgroups()
+    const toast = useToast();
+    const { isGroupLoading, groupData } = useWorkgroups("all")
     const { register, watch, reset, handleSubmit } = useForm<EditTaskVariables>()
     const [taskType, setTaskType] = useState("");
     const [groupIndex, setGroupIndex] = useState(0);
@@ -36,13 +37,23 @@ export default function TaskEditModal({ isOpen, onClose, pk, type, status, conte
     // 일정수정
     const mutation = useMutation(editTask, {
         onSuccess: (data) => {
-            // console.log(data)
+            toast({
+                status: "success",
+                description: "Done",
+                isClosable: true,
+                duration: 2000,
+            })
             reset()
             onClose()
             queryClient.refetchQueries(['task'])
         },
         onError: (error) => {
-            // console.log(error)
+            toast({
+                status: "success",
+                description: "Sorry Try Again later...",
+                isClosable: true,
+                duration: 2000,
+            })
         }
     })
     const onSubmit = ({type, tasker, content, status, limit_date, groupPk}: EditTaskVariables) => {

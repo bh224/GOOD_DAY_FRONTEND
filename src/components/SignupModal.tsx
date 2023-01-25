@@ -53,7 +53,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         }
     })
     const onSubmitId = () => {
-        // console.log(watch().username)
         const username = watch().username
         checkIdMutation.mutate({username})
     }
@@ -62,9 +61,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     }
     // 유저등록
     const mutation = useMutation(signUp, {
-        onMutate: () => {
-            // console.log("start")
-        },
         onSuccess: (data) => {
             signupToast({
                 status: "success",
@@ -99,7 +95,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         }
     }
     
-    // console.log(watch())
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay/>

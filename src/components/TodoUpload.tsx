@@ -11,8 +11,7 @@ interface TodoModalProps {
 }
 
 export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
-    const { isGroupLoading, groupData } = useWorkgroups()
-    // console.log(groupData)
+    const { isGroupLoading, groupData } = useWorkgroups("all")
     const { register, watch, reset, handleSubmit } = useForm<TaskVariables>()
     const queryClient = useQueryClient()
     const [type, setType] = useState("");
@@ -20,21 +19,18 @@ export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
     const toast = useToast();
     const mutation = useMutation(uploadTask, {
         onSuccess: (data) => {
-            // console.log(data)
             toast({
                 status: "success",
                 title: "일정이 등록되었습니다",
             })
+            queryClient.refetchQueries({ queryKey: ['myTodos', 'myGroupTask']})
             reset()
-            onClose()
-            queryClient.refetchQueries(['tasks'])
         },
         onError: (error) => {
             toast({
                 status: "error",
                 title: "다시 시도해 주세요"
             })
-            // console.log(error)
         }
     })
     const onSubmit = (data: TaskVariables) => {

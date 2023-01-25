@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Circle,
@@ -19,33 +18,28 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from 'react-helmet';
 import {FcTodoList} from "react-icons/fc";
-import { allTasks, getTasks, getTaskTome, tasksCounts } from "../api";
+import { getTasks, getMyGroupTask, tasksCounts } from "../api";
 import TodoUpload from "../components/TodoUpload";
 import { TasksList } from "../types";
 import Task from "../components/Task";
 import Alltasks from "../components/AllTasks";
-import TaskTome from "../components/TaskTome";
+import MyGroupTask from "../components/MyGroupTask";
 import useWorkgroups from "../lib/useWorkgroups";
 import GroupTasks from "../components/GroupTasks";
 import { formatDate } from "../lib/utils";
 import AllGroup from "../components/AllGroup";
+import useGroupPageList from "../lib/useGroupPageList";
 
-interface allProps {
-  data: string[];
-}
 
 export default function Main() {
   const today = new Date();
-  const { data } = useQuery<TasksList[]>(["tasks"], getTasks, { retry: false });
-  const { data: Tome } = useQuery<TasksList[]>(["tome"], getTaskTome, {retry: false});
-  const { data: taskCounts } = useQuery(['counts'], tasksCounts)
+  const { data } = useQuery<TasksList[]>(["myTodos"], getTasks, { retry: false });
+  const { data: myGroupTask } = useQuery<TasksList[]>(["myGroupTask"], getMyGroupTask, {retry: false});
+  const { data: taskCounts } = useQuery(['progress'], tasksCounts)
+  const { groupPageList } = useGroupPageList();
   const allCount = taskCounts?.data.all
   const doneCount = taskCounts?.data.done
   const progress = (doneCount / allCount) * 100
-  // console.log(progress)
-  const { isLoading: isAllLoading, data: allTaskData } = useQuery<allProps>(["alltasks"], allTasks, { retry: false });
-  // console.log(allTaskData?.data)
-  const { isGroupLoading, groupData } = useWorkgroups();
   // 일정등록모달
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -97,13 +91,13 @@ export default function Main() {
         <TodoUpload isOpen={isOpen} onClose={onClose} />
         <Box borderWidth="1px" borderRadius="lg" p={2} mb={5} boxShadow="md">
           <Heading textAlign={"center"} fontSize={"sm"} mb={2}>
-            나에게 온 할 일
+            그룹 일정
           </Heading>
           <Divider mb={2} />
-          {Tome ?
+          {myGroupTask ?
             <>
-            {Tome?.map((task) => (
-            <TaskTome
+            {myGroupTask?.map((task) => (
+            <MyGroupTask
               key={task.pk}
               pk={task.pk}
               author={task.author}
@@ -121,7 +115,7 @@ export default function Main() {
         </Box>
         <Box borderWidth="1px" borderRadius="lg" p={2} boxShadow="md">
           <Heading textAlign={"center"} fontSize={"sm"} mb={2}>
-            내가 등록한 할 일
+            개인 일정
           </Heading>
           <Divider mb={2} />
           {data ?
@@ -152,13 +146,13 @@ export default function Main() {
           </TabList>
           <TabPanels  overflowY={"scroll"}>
             <TabPanel>
-              {allTaskData ? <Alltasks data={allTaskData?.data} /> : null}
+              <Alltasks />
             </TabPanel>
             <TabPanel>
-              {groupData ? <GroupTasks data={groupData} /> : null}
+              {groupPageList ? <GroupTasks totalpage={groupPageList.mygroup} />  : null}
             </TabPanel>
             <TabPanel>
-              <AllGroup />
+              {groupPageList ? <AllGroup totalpage={groupPageList.allgroup} /> : null}
             </TabPanel>
           </TabPanels>
         </Tabs>

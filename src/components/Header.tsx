@@ -11,7 +11,7 @@ import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import { FcAlarmClock,} from "react-icons/fc";
 import { Link } from "react-router-dom";
 import React, { useState, useRef } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { endToday, getToday, logOut, startToday } from "../api";
 import useUser from "../lib/useUser";
 import LoginModal from "./LoginModal";
@@ -24,12 +24,22 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 
 export default function Header() {
   const now = TimeNow(new Date())
-  const { groupData } = useWorkgroups()
+  const { groupData } = useWorkgroups("all");
   const queryClient = useQueryClient();
   const [memberStatus, setMemberStatus] = useState<GroupMembersStatus[]>();
   const { userLoading, user, isLoggedIn } = useUser();
-  const { data: todayStatus } = useQuery(["today"], getToday, {retry:false}); 
+  const { data: todayStatus, isError } = useQuery(["today"], getToday, {retry: false})
   const toast = useToast();
+
+  // 로그인 & 유저등록 모달
+  const { isOpen:isLoginOpen, onOpen:onLoginOpen, onClose:onLoginClose } = useDisclosure();
+  const { isOpen: isSignupOpen, onOpen: onSignupOpen, onClose: onSignupClose } = useDisclosure();
+  const instance = axios.create({
+    // baseURL: "https:/good-day.today/api/v1/",
+    // baseURL: "http://127.0.0.1:8000/api/v1/",
+    baseURL: process.env.REACT_APP_HOST,
+    withCredentials: true, 
+  })
 
   // 로그아웃
   const mutation = useMutation(logOut, {
@@ -48,16 +58,6 @@ export default function Header() {
     mutation.mutate()
   }
 
-  // 로그인 & 유저등록 모달
-  const { isOpen:isLoginOpen, onOpen:onLoginOpen, onClose:onLoginClose } = useDisclosure();
-  const { isOpen: isSignupOpen, onOpen: onSignupOpen, onClose: onSignupClose } = useDisclosure();
-  const instance = axios.create({
-    // baseURL: "https:/good-day.today/api/v1/",
-    // baseURL: "http://127.0.0.1:8000/api/v1/",
-    baseURL: process.env.REACT_APP_HOST,
-    withCredentials: true, 
-  })
-
   // 그룹멤버 투데이
   const groupStatus = (pk:string) => instance.get(`users/todays?group=${pk}`).then((response)=>response.data)
   const getGroupStatus = async (pk: string) => {
@@ -68,11 +68,21 @@ export default function Header() {
   // 투데이 start-end
   const startMutation = useMutation(startToday, {
     onSuccess: (data) => {
-      // console.log(data)
+      toast({
+        status: "success",
+        description: "Have a GOOD DAY ☀️",
+        isClosable: true,
+        duration: 2000,
+      })
       queryClient.refetchQueries(["today"])
     },
     onError: (error) => {
-      // console.log(error)
+      toast({
+        status: "success",
+        description: "Sorry Try Again later...🥲",
+        isClosable: true,
+        duration: 2000,
+      })
     }
   })
   const submitStart = () => {
@@ -82,15 +92,24 @@ export default function Header() {
   }
   const endMutation = useMutation(endToday, {
     onSuccess: (data) => {
-      // console.log(data)
+      toast({
+        status: "success",
+        description: "Good Bye, see you tommorow 🌛",
+        isClosable: true,
+        duration: 2000,
+      })
       queryClient.refetchQueries(["today"])
     },
     onError: (error) => {
-      // console.log(error)
+      toast({
+        status: "success",
+        description: "Sorry Try Again later...🥲",
+        isClosable: true,
+        duration: 2000,
+      })
     }
   })
   const submitEnd = () => {
-    // console.log("click")
     const state_code = "off"
     const end_time = now
     endMutation.mutate({state_code, end_time})
@@ -175,7 +194,7 @@ export default function Header() {
               {todayStatus?.state_code === "off" ? <Text>{StatusTime(todayStatus.end_time)} END</Text> : null}
             {todayStatus.state_code === "on" ? <Text>🟢ON</Text> : <Text>⚪OFF</Text>}
             </HStack>
-            : null}
+              : <Text>투데이 등록해 주세요👉</Text>}
         {todayStatus?.state_code==="on" || todayStatus?.state_code==="off" ? <Button disabled size={"xs"} onClick={submitStart} variant={"ghost"}>출근🥰</Button>:<Button  size={"xs"} onClick={submitStart} variant={"ghost"}>출근🥰</Button> }
         {todayStatus?.state_code==="off" ? <Button disabled size={"xs"} onClick={submitEnd} variant={"ghost"}>퇴근😎</Button> : <Button  size={"xs"} onClick={submitEnd} variant={"ghost"}>퇴근😎</Button>}
         
