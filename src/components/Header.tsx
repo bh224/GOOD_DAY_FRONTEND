@@ -51,7 +51,7 @@ export default function Header() {
         isClosable: true,
         duration: 2000,
       })
-      queryClient.refetchQueries(['user'])
+      queryClient.removeQueries({ type: 'all' })
     }
   })
   const onLogout = async () => {
