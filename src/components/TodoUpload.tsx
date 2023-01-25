@@ -1,7 +1,7 @@
 import { Badge, Box, Button, Checkbox, Circle, Flex, HStack, Input, InputGroup, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Select, Text, Textarea, useDisclosure, useToast, VStack } from "@chakra-ui/react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { TaskVariables, uploadTask } from "../api";
+import { getWorkgroups, TaskVariables, uploadTask } from "../api";
 import { useForm } from "react-hook-form";
 import useWorkgroups from "../lib/useWorkgroups";
 
@@ -10,8 +10,21 @@ interface TodoModalProps {
     onClose: () => void;
 }
 
+interface Members {
+    pk: number;
+    username: string;
+    nickname: string;
+}
+
+interface GetMyGroups {
+    pk: number;
+    group_name: string;
+    members: Members[];
+}
+
 export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
-    const { isGroupLoading, groupData } = useWorkgroups("all")
+    const { data:groupData } = useQuery<GetMyGroups[]>(['myWorkgriyos', 'all'], getWorkgroups)
+    console.log(groupData)
     const { register, watch, reset, handleSubmit } = useForm<TaskVariables>()
     const queryClient = useQueryClient()
     const [type, setType] = useState("");
@@ -23,8 +36,9 @@ export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
                 status: "success",
                 title: "일정이 등록되었습니다",
             })
-            queryClient.refetchQueries({ queryKey: ['myTodos', 'myGroupTask']})
+            queryClient.refetchQueries(['myTodos', 'myGroupTask'])
             reset()
+            onClose()
         },
         onError: (error) => {
             toast({
