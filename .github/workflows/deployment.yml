@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
 
-      - name: Setting .env파일
+      - name: Setting .env
         run: |
           echo "REACT_APP_HOST=$REACT_APP_HOST" >> .env.production
           echo "REACT_APP_GOOGLE_CLIENTID=$REACT_APP_HOST" >> .env.production
@@ -38,7 +38,10 @@ jobs:
           REACT_APP_KAKAO_REDIRECT: ${{ secrets.REACT_APP_KAKAO_REDIRECT }}
           REACT_APP_KAKAO_CLIENTID: ${{ secrets.REACT_APP_KAKAO_CLIENTID }}
           REACT_STATE_CODE: ${{ secrets.REACT_STATE_CODE }}
-          cat .env.production
+          
+
+      - name: env 파일
+        run: cat .env.production
 
       - name: Install dependencies
         run: npm install
