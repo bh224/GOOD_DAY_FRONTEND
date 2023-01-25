@@ -24,10 +24,12 @@ jobs:
 
       - name: Setting .env
         run: |
+          echo "REACT_APP_HOST=$REACT_APP_HOST" >> .env.production
           echo "REACT_APP_GOOGLE_CLIENTID=$REACT_APP_HOST" >> .env.production
           echo "REACT_APP_API_DOMAIN=$REACT_APP_REDIRECT_GOOGLE" >> .env.production
           echo "REACT_APP_KAKAO_REDIRECT=$REACT_APP_REDIRECT_KAKAO" >> .env.production
           echo "REACT_APP_KAKAO_CLIENTID=$REACT_APP_REDIRECT_NAVER" >> .env.production
+          echo "REACT_STATE_CODE=$REACT_STATE_CODE" >> .env.production
           cat .env.production
 
       - name: Install dependencies
@@ -35,12 +37,6 @@ jobs:
 
       - name: Build
         run: CI="false" npm run build
-
-      - name: 빌드파일위치
-        run: ls -la
-      
-      - name: 빌드파일위치
-        run: pwd
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
