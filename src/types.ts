@@ -20,6 +20,15 @@ export interface WorkGroup {
     member: GroupMembers;
 }
 
+export interface AllWorkGroupList {
+    pk: number;
+    group_code: string;
+    group_name: string;
+    description: string;
+    is_member: boolean;
+    member_cnt: number;
+}
+
 export interface GroupMembers {
     pk: number;
     username: string;
@@ -41,8 +50,8 @@ export interface CommentDetails {
     pk: number;
     author: GroupMembers;
     content: string;
-    task: string | undefined;
     created_at: string;
+    task: string | undefined;
 }
 
 export interface GroupMembersStatus {

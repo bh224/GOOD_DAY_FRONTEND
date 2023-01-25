@@ -2,22 +2,32 @@ import {   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionPanel,
-    AccordionIcon, Box, VStack, Text, Flex, Badge
+    AccordionIcon, Box, VStack, Text, Flex, Badge, HStack, Button
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { dailyTask } from "../api";
+import { getDateList, dailyTask } from "../api";
+import useDatePageList from "../lib/useDatePageList";
 import { DateToString } from "../lib/utils";
 import { TaskDetails } from "../types";
 
+interface allProps {
+    data: string[];
+}
 
-
-export default function Alltasks({data}:any) {
+export default function Alltasks({ data }: any) {
+    const { pageLoading, pageList } = useDatePageList();
     const [taskList, setTaskList] = useState<TaskDetails[]>([]);
+    const [page, setPage] = useState("1");
+    const [totalPage, setTotalPage] = useState("1");
+    const { isLoading: isAllLoading, data: dateList } = useQuery<allProps>(["date-list", page], getDateList, { retry: false });
+
     const getDailytask = async (date: string) => {
         const data = await dailyTask(date)
         setTaskList({ data }.data)
     }
+
     return (
         <VStack>
             <Box>
@@ -25,8 +35,8 @@ export default function Alltasks({data}:any) {
             </Box>
             <Text fontSize={"xs"}>지난 내 일정들을 볼 수 있습니다</Text>
             <Accordion allowToggle w={{base: "100%", md: "100%"}} >
-                {data?.map((date:string) => (
-                    <AccordionItem key={date}>
+                {dateList?.data?.map((date:string, idx:number) => (
+                    <AccordionItem key={idx}>
                     <h2>
                     <AccordionButton>
                     <Box flex='1' textAlign='left' id={date} onClick={(e) => {
@@ -54,6 +64,15 @@ export default function Alltasks({data}:any) {
                     </AccordionItem>
                             ))}
             </Accordion>
+            <HStack>
+                {pageList?.data?.map((page: number, idx: number)=>(
+                    <Button size={"xs"} key={idx} id={page.toString()} onClick={(e) => {
+                        const target = e.target as HTMLDivElement
+                        // requestPage(target.id)
+                        setPage(target.id)
+                    }}>{page}</Button>
+                ))}
+            </HStack>
         </VStack>
     )
 }
