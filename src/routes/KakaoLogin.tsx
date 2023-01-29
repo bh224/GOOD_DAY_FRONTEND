@@ -11,7 +11,6 @@ export default function KakaoLogin() {
     const navigate = useNavigate()
     const params = new URLSearchParams(search)
     const code = params.get("code")
-    console.log(code)
     const confirmLogin = async () => {
         if (code) {
             const status = await kakaoLogin(code);

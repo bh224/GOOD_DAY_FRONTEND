@@ -35,10 +35,10 @@ import useGroupPageList from "../lib/useGroupPageList";
 export default function Main() {
   const { userLoading, user, isLoggedIn } = useUser();
   const today = new Date();
-  const { data } = useQuery<TasksList[]>(["myTodos"], getTasks, { retry: false, enabled: !isLoggedIn });
-  const { data: myGroupTask } = useQuery<TasksList[]>(["myGroupTask"], getMyGroupTask, {retry: false, enabled: !isLoggedIn});
-  const { data: taskCounts } = useQuery(['progress'], tasksCounts, { retry: false, enabled: !isLoggedIn })
-  const { groupPageList } = useGroupPageList();
+  const { data } = useQuery<TasksList[]>(["myTodos"], getTasks, { retry: false, enabled: isLoggedIn });
+  const { data: myGroupTask } = useQuery<TasksList[]>(["myGroupTask"], getMyGroupTask, {retry: false, enabled: isLoggedIn});
+  const { data: taskCounts } = useQuery(['progress'], tasksCounts, { retry: false, enabled: isLoggedIn })
+  const { groupPageLoading, groupPageList } = useGroupPageList();
   const allCount = taskCounts?.data.all
   const doneCount = taskCounts?.data.done
   const progress = (doneCount / allCount) * 100
@@ -151,10 +151,13 @@ export default function Main() {
               <Alltasks />
             </TabPanel>
             <TabPanel>
-              {groupPageList ? <GroupTasks totalpage={groupPageList.mygroup} />  : null}
+              {/* {!groupPageLoading ? (
+                groupPageList ?  (<GroupTasks totalpage={groupPageList.mygroup} /> ) : null
+              ) : null} */}
+              <GroupTasks />
             </TabPanel>
             <TabPanel>
-              {groupPageList ? <AllGroup totalpage={groupPageList.allgroup} /> : null}
+              <AllGroup />
             </TabPanel>
           </TabPanels>
         </Tabs>

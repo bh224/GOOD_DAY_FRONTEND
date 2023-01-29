@@ -7,13 +7,13 @@ import { useForm } from 'react-hook-form';
 import Group from './Group';
 import { useState } from 'react';
 import useUser from "../lib/useUser";
+import useGroupPageList from '../lib/useGroupPageList';
 
 
 export default function AllGroup({ totalpage }: any) {
-    const { userLoading, user, isLoggedIn } = useUser();
+    const { groupPageLoading, groupPageList } = useGroupPageList();
     const [page, setPage] = useState("1");
-    const { isLoading, data } = useQuery<AllWorkGroupList[]>(['allGroups', page], getAllGroups, {retry:false, enabled:!isLoggedIn});
-
+    const { isLoading, data } = useQuery<AllWorkGroupList[]>(['allGroups', page], getAllGroups, { retry: false });
     const queryClient = useQueryClient();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { register, watch, reset, handleSubmit } = useForm<CreateGroupVariables>();
@@ -56,7 +56,7 @@ export default function AllGroup({ totalpage }: any) {
                 ))}
             </VStack>
             <HStack>
-                {totalpage.map((page: number, idx: number)=>(
+                {groupPageList?.allgroup.map((page: number, idx: number)=>(
                     <Button size={"xs"} key={idx} id={page.toString()} onClick={(e) => {
                         const target = e.target as HTMLDivElement
                         // requestPage(target.id)

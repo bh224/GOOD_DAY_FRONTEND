@@ -28,8 +28,7 @@ export default function Header() {
   const queryClient = useQueryClient();
   const [memberStatus, setMemberStatus] = useState<GroupMembersStatus[]>();
   const { userLoading, user, isLoggedIn } = useUser();
-  console.log(isLoggedIn)
-  const { data: todayStatus, isError } = useQuery(["today"], getToday, {retry: false, enabled: !isLoggedIn})
+  const { data: todayStatus, isError } = useQuery(["today"], getToday, {retry: false, enabled: isLoggedIn})
   const toast = useToast();
 
   // 로그인 & 유저등록 모달
@@ -53,6 +52,8 @@ export default function Header() {
         duration: 2000,
       })
       queryClient.removeQueries({ type: 'all' })
+      queryClient.clear()
+      queryClient.refetchQueries()
     }
   })
   const onLogout = async () => {

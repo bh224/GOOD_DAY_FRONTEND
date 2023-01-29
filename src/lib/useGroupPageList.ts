@@ -5,7 +5,7 @@ import useUser from "../lib/useUser";
 
 export default function useGroupPageList() {
     const { userLoading, user, isLoggedIn } = useUser();
-    const { isLoading, data } = useQuery(['group-page'], getGroupPageList, {retry:false, enabled:!isLoggedIn})
+    const { isLoading, data } = useQuery(['group-page'], getGroupPageList, {retry:false})
     return {
         groupPageLoading: isLoading,
         groupPageList: data,

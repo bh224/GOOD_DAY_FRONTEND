@@ -4,8 +4,7 @@ import useUser from './useUser';
 
 
 export default function useDatePageList() {
-    const { userLoading, user, isLoggedIn } = useUser();
-    const { isLoading, data } = useQuery(['date-page'], getDatePageList, {retry:false, enabled: !isLoggedIn})
+    const { isLoading, data } = useQuery(['date-page'], getDatePageList, { retry: false })
     return {
         pageLoading: isLoading,
         pageList: data,

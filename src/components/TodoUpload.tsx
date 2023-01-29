@@ -24,7 +24,6 @@ interface GetMyGroups {
 
 export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
     const { data:groupData } = useQuery<GetMyGroups[]>(['myWorkgriyos', 'all'], getWorkgroups)
-    // console.log(groupData)
     const { register, watch, reset, handleSubmit } = useForm<TaskVariables>()
     const queryClient = useQueryClient()
     const [type, setType] = useState("");

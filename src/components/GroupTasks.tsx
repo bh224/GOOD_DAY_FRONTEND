@@ -11,8 +11,10 @@ import { groupTasks } from "../api";
 import { DateToString } from "../lib/utils";
 import { TaskDetails, TasksList } from "../types";
 import useWorkgroups from "../lib/useWorkgroups";
+import useGroupPageList from "../lib/useGroupPageList";
 
-export default function GroupTasks({ totalpage }: any) {
+export default function GroupTasks() {
+    const { groupPageLoading, groupPageList } = useGroupPageList();
     const [page, setPage] = useState("1");
     const { isGroupLoading, groupData } = useWorkgroups(page);
     const [groupList, setGroupList] = useState<TaskDetails[]>([]);
@@ -58,13 +60,12 @@ export default function GroupTasks({ totalpage }: any) {
                 ))}
             </Accordion>
             <HStack>
-                {totalpage.map((page: number, idx: number)=>(
+                {groupPageList ? groupPageList.mygroup.map((page: number, idx: number)=>(
                     <Button size={"xs"} key={idx} id={page.toString()} onClick={(e) => {
                         const target = e.target as HTMLDivElement
-                        // requestPage(target.id)
                         setPage(target.id)
                     }}>{page}</Button>
-                ))}
+                )) : null}
             </HStack>
         </VStack>
     )
