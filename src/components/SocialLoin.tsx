@@ -29,8 +29,8 @@ export default function SocialLogin() {
             </HStack>
             <VStack justifyContent={"space-evenly"} mb={5}>
                 <Button as="a" href={`https://kauth.kakao.com/oauth/authorize?${kakao}&redirect_uri=${process.env.REACT_APP_REDIRECT_KAKAO}`} mt={5} w="100%" bg={"#FEE500"} leftIcon={<BsChatFill/>}>Login with Kakao</Button>
-                <Button as="a" href={`https://nid.naver.com/oauth2.0/authorize?${naver}&redirect_uri=${process.env.REACT_APP_REDIRECT_NAVER}`} mt={5} w="100%" bg={"#03C75A"} color={"white"} >Login with Naver</Button>
                 <Button as="a" href={`https://accounts.google.com/o/oauth2/v2/auth?${google}&redirect_uri=${process.env.REACT_APP_REDIRECT_GOOGLE}`} mt={5} w="100%" bg={"blue.100"} leftIcon={<FcGoogle />}>Login with Google</Button>
+                {/* <Button as="a" href={`https://nid.naver.com/oauth2.0/authorize?${naver}&redirect_uri=${process.env.REACT_APP_REDIRECT_NAVER}`} mt={5} w="100%" bg={"#03C75A"} color={"white"} >Login with Naver</Button> */}
             </VStack>
         </Box>
     )

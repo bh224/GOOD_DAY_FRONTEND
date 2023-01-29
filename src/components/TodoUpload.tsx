@@ -24,7 +24,7 @@ interface GetMyGroups {
 
 export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
     const { data:groupData } = useQuery<GetMyGroups[]>(['myWorkgriyos', 'all'], getWorkgroups)
-    console.log(groupData)
+    // console.log(groupData)
     const { register, watch, reset, handleSubmit } = useForm<TaskVariables>()
     const queryClient = useQueryClient()
     const [type, setType] = useState("");
@@ -32,11 +32,12 @@ export default function TodoUpload({ isOpen, onClose }: TodoModalProps) {
     const toast = useToast();
     const mutation = useMutation(uploadTask, {
         onSuccess: (data) => {
+            queryClient.refetchQueries(['myTodos'])
+            queryClient.refetchQueries(['myGroupTask'])
             toast({
                 status: "success",
                 title: "일정이 등록되었습니다",
             })
-            queryClient.refetchQueries(['myTodos', 'myGroupTask'])
             reset()
             onClose()
         },

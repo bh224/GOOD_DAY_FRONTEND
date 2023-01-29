@@ -34,7 +34,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     const checkToast = useToast();
     const signupToast = useToast();
     const navigate = useNavigate();
-    const [groupCode, setGroupCode] = useState(["9", "9", "9", "9"]);
+    const [groupCode, setGroupCode] = useState(["", "", "", ""]);
     const [checkId, setCheckID] = useState(false);
     const mergeCode = () => {
         setGroupCode([watch().code1, watch().code2, watch().code3, watch().code4])
@@ -67,9 +67,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 description: "유저등록이 완료되었습니다!",
                 duration: 2000
             })
+            reset()
             onClose()
             queryClient.refetchQueries(['user'])
-            reset()
             navigate('/')
         },
         onError: () => {

@@ -27,15 +27,17 @@ import MyGroupTask from "../components/MyGroupTask";
 import useWorkgroups from "../lib/useWorkgroups";
 import GroupTasks from "../components/GroupTasks";
 import { formatDate } from "../lib/utils";
+import useUser from "../lib/useUser";
 import AllGroup from "../components/AllGroup";
 import useGroupPageList from "../lib/useGroupPageList";
 
 
 export default function Main() {
+  const { userLoading, user, isLoggedIn } = useUser();
   const today = new Date();
-  const { data } = useQuery<TasksList[]>(["myTodos"], getTasks, { retry: false });
-  const { data: myGroupTask } = useQuery<TasksList[]>(["myGroupTask"], getMyGroupTask, {retry: false});
-  const { data: taskCounts } = useQuery(['progress'], tasksCounts)
+  const { data } = useQuery<TasksList[]>(["myTodos"], getTasks, { retry: false, enabled: !isLoggedIn });
+  const { data: myGroupTask } = useQuery<TasksList[]>(["myGroupTask"], getMyGroupTask, {retry: false, enabled: !isLoggedIn});
+  const { data: taskCounts } = useQuery(['progress'], tasksCounts, { retry: false, enabled: !isLoggedIn })
   const { groupPageList } = useGroupPageList();
   const allCount = taskCounts?.data.all
   const doneCount = taskCounts?.data.done

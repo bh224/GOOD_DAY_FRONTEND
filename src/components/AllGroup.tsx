@@ -6,11 +6,13 @@ import { AllWorkGroupList } from '../types';
 import { useForm } from 'react-hook-form';
 import Group from './Group';
 import { useState } from 'react';
+import useUser from "../lib/useUser";
 
 
 export default function AllGroup({ totalpage }: any) {
+    const { userLoading, user, isLoggedIn } = useUser();
     const [page, setPage] = useState("1");
-    const { isLoading, data } = useQuery<AllWorkGroupList[]>(['allGroups', page], getAllGroups);
+    const { isLoading, data } = useQuery<AllWorkGroupList[]>(['allGroups', page], getAllGroups, {retry:false, enabled:!isLoggedIn});
 
     const queryClient = useQueryClient();
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,7 +27,7 @@ export default function AllGroup({ totalpage }: any) {
             })
             reset()
             onClose()
-            queryClient.refetchQueries(['myGroups'])
+            queryClient.refetchQueries(['allGroups', '1'])
         },
         onError: (error) => {
             toast({

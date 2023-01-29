@@ -31,8 +31,8 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         duration: 2000,
       })
       queryClient.refetchQueries(['user'])
-      onClose()
       reset()
+      onClose()
     },
     onError: (error) => {
       toast({
