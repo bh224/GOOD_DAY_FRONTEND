@@ -22,7 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
 
-      - name: Setting .env
+      - name: Setting .env.production
         run: |
           echo "REACT_APP_HOST=$REACT_APP_HOST" >> .env.production
           echo "REACT_APP_REDIRECT_KAKAO=$REACT_APP_REDIRECT_KAKAO" >> .env.production
